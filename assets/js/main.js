@@ -155,3 +155,48 @@ if (document.readyState === 'loading') {
     // DOM déjà chargé
     initScrollAnimations();
 }
+
+// ============================================
+// Accès secret au dashboard admin - Triple-clic sur le logo
+// ============================================
+(function() {
+    'use strict';
+    
+    let clickCount = 0;
+    let clickTimer = null;
+    const REQUIRED_CLICKS = 3; // Triple-clic requis
+    const CLICK_TIMEOUT = 1000; // Temps maximum entre les clics (en ms)
+    
+    // Gestion du triple-clic sur le logo pour accéder au dashboard admin
+    const logo = document.getElementById('siteLogo') || document.getElementById('logoLink');
+    if (logo) {
+        logo.addEventListener('click', function(e) {
+            clickCount++;
+            
+            // Réinitialiser le compteur si trop de temps s'est écoulé
+            if (clickTimer) {
+                clearTimeout(clickTimer);
+            }
+            
+            clickTimer = setTimeout(function() {
+                clickCount = 0;
+            }, CLICK_TIMEOUT);
+            
+            // Si le triple-clic est atteint, rediriger vers le dashboard
+            if (clickCount >= REQUIRED_CLICKS) {
+                e.preventDefault();
+                clickCount = 0;
+                clearTimeout(clickTimer);
+                
+                // Petit feedback visuel
+                logo.style.opacity = '0.5';
+                setTimeout(function() {
+                    logo.style.opacity = '1';
+                }, 200);
+                
+                // Rediriger vers le dashboard admin
+                window.location.href = 'admin/';
+            }
+        }, false);
+    }
+})();

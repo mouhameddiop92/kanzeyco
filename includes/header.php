@@ -24,8 +24,8 @@
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <div class="logo">
+            <a class="navbar-brand" href="#" id="logoLink">
+                <div class="logo" id="siteLogo">
                     <img src="assets/images/Logo Kanzey Co.png" alt="logo" style="width: 100px; height: 100px; object-fit: contain;">
                 </div>
             </a>

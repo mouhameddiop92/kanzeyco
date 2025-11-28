@@ -1,5 +1,26 @@
 <?php
 include 'includes/header.php';
+require_once 'includes/articles-db.php';
+$pdo = getDBConnection();
+$newsCategory = $_GET['news_category'] ?? '';
+
+// Lire dynamiquement les catégories présentes en BDD
+$categories = [];
+if ($pdo) {
+    try {
+        $stm = $pdo->query("SELECT DISTINCT category FROM articles WHERE status='published' ORDER BY category ASC");
+        $categories = array_column($stm->fetchAll(), 'category');
+    } catch (Exception $e) {
+        $categories = ['Événementiel', 'Immobilier', 'Innovation', 'Marketing', 'Success Story', 'Analytics'];
+    }
+} else {
+    $categories = ['Événementiel', 'Immobilier', 'Innovation', 'Marketing', 'Success Story', 'Analytics'];
+}
+
+// Charger les articles filtrés si besoin, sinon tous
+$recentArticles = $newsCategory ? getArticles($newsCategory, 4) : getArticles(null, 4);
+$featuredArticle = $recentArticles[0] ?? null;
+$otherArticles = array_slice($recentArticles, 1, 3);
 ?>
 
 <!-- Hero Section -->
@@ -41,7 +62,7 @@ include 'includes/header.php';
                         <i class="bi bi-eye"></i>
                     </div>
                     <div>
-                        <h3 class="fw-bold mb-2">Notre Vision</h3>
+                        <h3 class="fw-bold mb-2">Notre vision</h3>
                         <p class="text-muted mb-0">
                             Devenir la référence ouest-africaine de la digitalisation sectorielle,
                             en transformant les métiers traditionnels (événementiel, immobilier, commerce…)
@@ -56,7 +77,7 @@ include 'includes/header.php';
                         <i class="bi bi-bullseye"></i>
                     </div>
                     <div>
-                        <h3 class="fw-bold mb-2">Notre Mission</h3>
+                        <h3 class="fw-bold mb-2">Notre mission</h3>
                         <p class="text-muted mb-0">
                             Offrir à chaque entreprise africaine les outils numériques, la data et l'automatisation
                             pour structurer, vendre et piloter ses activités — avec efficacité, transparence
@@ -93,7 +114,7 @@ include 'includes/header.php';
     <div class="container">
         <div class="row">
             <div class="col-12 text-center mb-5">
-                <h2 class="section-title metier-section-title-animate">Nos Solutions Métiers</h2>
+                <h2 class="section-title metier-section-title-animate">Nos solutions métiers</h2>
                 <p class="section-subtitle metier-section-subtitle-animate">Des plateformes sectorielles conçues pour transformer votre activité</p>
             </div>
         </div>
@@ -219,7 +240,7 @@ include 'includes/header.php';
         <div class="row">
             <div class="col-12 text-center mb-5">
                 <span class="transversal-tag">Solutions d'accompagnement</span>
-                <h2 class="section-title mt-3">Au-delà des Solutions Sectorielles</h2>
+                <h2 class="section-title mt-3">Au-delà des solutions sectorielles</h2>
                 <p class="section-subtitle">Un écosystème complet de services pour accompagner votre transformation digitale de A à Z</p>
             </div>
         </div>
@@ -355,7 +376,7 @@ include 'includes/header.php';
             </div>
             <div class="col-lg-6">
                 <div class="ai-cta-content">
-                    <span class="ai-tag col-md-4">Intelligence Artificielle</span>
+                    <span class="ai-tag col-md-4">Intelligence artificielle</span>
                     <h3 class="ai-cta-title">Propulsez votre entreprise avec l'IA</h3>
                     <p class="ai-cta-description">Nous développons des agents IA personnalisés et des solutions d'automatisation intelligente pour transformer vos processus métiers et améliorer votre efficacité opérationnelle.</p>
                     <ul class="ai-cta-checklist">
@@ -374,7 +395,7 @@ include 'includes/header.php';
         <!-- Architecture de la Plateforme -->
         <div class="row">
             <div class="col-12 text-center mb-5">
-                <h2 class="section-title">Architecture de la Plateforme</h2>
+                <h2 class="section-title">Architecture de la plateforme</h2>
                 <p class="section-subtitle">Une structure modulaire et évolutive en trois couches complémentaires</p>
             </div>
         </div>
@@ -415,7 +436,7 @@ include 'includes/header.php';
     <div class="container">
         <div class="row">
             <div class="col-12 text-center mb-5">
-                <h2 class="section-title">Nos Valeurs</h2>
+                <h2 class="section-title">Nos valeurs</h2>
                 <p class="section-subtitle">Les principes qui guident notre action au quotidien</p>
             </div>
         </div>
@@ -465,7 +486,7 @@ include 'includes/header.php';
     <div class="container">
         <div class="row">
             <div class="col-12 text-center mb-5">
-                <h2 class="section-title">Notre Impact en Chiffres</h2>
+                <h2 class="section-title">Notre Impact en chiffres</h2>
                 <p class="section-subtitle">Des résultats concrets au service de la transformation digitale africaine</p>
             </div>
         </div>
@@ -475,7 +496,7 @@ include 'includes/header.php';
                     <div class="impact-icon">
                         <i class="bi bi-graph-up"></i>
                     </div>
-                    <h2 class="impact-number-new">500+</h2>
+                    <h2 class="impact-number-new">20+</h2>
                     <p class="impact-text-new">Partenariats gérés</p>
                 </div>
             </div>
@@ -484,7 +505,7 @@ include 'includes/header.php';
                     <div class="impact-icon">
                         <i class="bi bi-people"></i>
                     </div>
-                    <h2 class="impact-number-new">1000+</h2>
+                    <h2 class="impact-number-new">150+</h2>
                     <p class="impact-text-new">Biens immobiliers</p>
                 </div>
             </div>
@@ -493,7 +514,7 @@ include 'includes/header.php';
                     <div class="impact-icon">
                         <i class="bi bi-award"></i>
                     </div>
-                    <h2 class="impact-number-new">50+</h2>
+                    <h2 class="impact-number-new">10+</h2>
                     <p class="impact-text-new">Entreprises partenaires</p>
                 </div>
             </div>
@@ -502,7 +523,7 @@ include 'includes/header.php';
                     <div class="impact-icon">
                         <i class="bi bi-star"></i>
                     </div>
-                    <h2 class="impact-number-new">20K+</h2>
+                    <h2 class="impact-number-new">15K+</h2>
                     <p class="impact-text-new">Utilisateurs actifs</p>
                 </div>
             </div>
@@ -515,7 +536,7 @@ include 'includes/header.php';
     <div class="container">
         <div class="row">
             <div class="col-12 text-center mb-5">
-                <h2 class="section-title">Ils Nous Ont Fait Confiance</h2>
+                <h2 class="section-title">Ils nous ont fait confiance</h2>
                 <p class="section-subtitle">Des entreprises innovantes de toute l'Afrique de l'Ouest choisissent Kanzey.co pour leur transformation digitale</p>
             </div>
         </div>
@@ -669,132 +690,56 @@ include 'includes/header.php';
 </section>
 
 <!-- Dernières Actualités -->
-<section id="actualites" class="news-section py-5">
+<section class="news-section py-5" style="padding-top: 6rem;" id="actualites">
     <div class="container">
-        <div class="news-header text-center">
+        <div class="news-header text-center mb-5">
             <span class="transversal-tag">Blog & Actualités</span>
-            <h2 class="news-title">Dernières Actualités</h2>
-            <p class="news-subtitle">Restez informé des dernières tendances et innovations en transformation digitale.</p>
+            <h1 class="news-title">Nos insights pour accélérer votre transformation</h1>
+            <p class="news-subtitle">Cas clients, tendances sectorielles, retours d'expérience et conseils actionnables.</p>
         </div>
-
-        <div class="news-filters">
-            <button class="news-filter-btn active">Tous</button>
-            <button class="news-filter-btn">Événementiel</button>
-            <button class="news-filter-btn">Immobilier</button>
-            <button class="news-filter-btn">Innovation</button>
-            <button class="news-filter-btn">Marketing</button>
-            <button class="news-filter-btn">Success Story</button>
-            <button class="news-filter-btn">Analytics</button>
-        </div>
-
-        <div class="news-feature">
-            <div class="news-feature-image">
-                <img src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80" alt="Transformations digitales">
-                <span class="news-tag">Événementiel</span>
-            </div>
-            <div class="news-feature-content">
-                <div class="news-feature-meta">
-                    <span>15 Octobre 2025</span>
-                    <span>5 min</span>
+        <?php if ($featuredArticle): ?>
+            <div class="news-feature mb-5">
+                <div class="news-feature-image">
+                    <img src="<?php echo htmlspecialchars($featuredArticle['image']); ?>" alt="<?php echo htmlspecialchars($featuredArticle['title']); ?>">
+                    <span class="news-tag"><?php echo htmlspecialchars($featuredArticle['category']); ?></span>
                 </div>
-                <h3 class="news-feature-title">Comment la digitalisation transforme l'événementiel en Afrique de l'Ouest</h3>
-                <p class="news-feature-excerpt">Découvrez comment les nouvelles technologies révolutionnent la gestion d'événements et l'expérience des participants dans notre région.</p>
-                <div class="news-feature-actions">
-                    <a href="article-detail.php?slug=digitalisation-evenementiel-afrique" class="btn-news-primary">Lire l'article</a>
-                    <button class="btn-news-icon" aria-label="Enregistrer l'article">
-                        <i class="bi bi-bookmark"></i>
-                    </button>
+                <div class="news-feature-content">
+                    <div class="news-feature-meta">
+                        <span><?php echo htmlspecialchars($featuredArticle['date']); ?></span>
+                        <span><?php echo htmlspecialchars($featuredArticle['read_time'] ?? ''); ?></span>
+                    </div>
+                    <h3 class="news-feature-title"><?php echo htmlspecialchars($featuredArticle['title']); ?></h3>
+                    <p class="news-feature-excerpt"><?php echo htmlspecialchars($featuredArticle['excerpt']); ?></p>
+                    <div class="news-feature-actions">
+                        <a href="article-detail.php?slug=<?php echo urlencode($featuredArticle['slug']); ?>" class="btn-news-primary">Lire l'article</a>
+                        <button class="btn-news-icon" aria-label="Enregistrer l'article">
+                            <i class="bi bi-bookmark"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-
+        <?php endif; ?>
         <div class="news-grid">
-            <article class="news-card">
-                <div class="news-card-image">
-                    <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80" alt="PropTech">
-                    <span class="news-tag">Immobilier</span>
-                </div>
-                <div class="news-card-body">
-                    <div class="news-card-meta">
-                        <span>10 Octobre 2025</span>
-                        <span>7 min</span>
+            <?php foreach ($otherArticles as $article): ?>
+                <article class="news-card">
+                    <div class="news-card-image">
+                        <img src="<?php echo htmlspecialchars($article['image']); ?>" alt="<?php echo htmlspecialchars($article['title']); ?>">
+                        <span class="news-tag"><?php echo htmlspecialchars($article['category']); ?></span>
                     </div>
-                    <h4 class="news-card-title">Les tendances de la PropTech en 2025 : ce qui change pour l'immobilier africain</h4>
-                    <p class="news-card-excerpt">Intelligence artificielle, plateformes collaboratives, visites virtuelles : tour d'horizon des innovations qui redéfinissent la chaîne de valeur immobilière.</p>
-                    <a href="article-detail.php?slug=proptech-tendances-2025" class="news-card-link">Lire plus</a>
-                </div>
-            </article>
-
-            <article class="news-card">
-                <div class="news-card-image">
-                    <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80" alt="Automatisation">
-                    <span class="news-tag">Innovation</span>
-                </div>
-                <div class="news-card-body">
-                    <div class="news-card-meta">
-                        <span>08 Octobre 2025</span>
-                        <span>6 min</span>
+                    <div class="news-card-body">
+                        <div class="news-card-meta">
+                            <span><?php echo htmlspecialchars($article['date']); ?></span>
+                            <span><?php echo htmlspecialchars($article['read_time'] ?? ''); ?></span>
+                        </div>
+                        <h4 class="news-card-title"><?php echo htmlspecialchars($article['title']); ?></h4>
+                        <p class="news-card-excerpt"><?php echo htmlspecialchars($article['excerpt']); ?></p>
+                        <a href="article-detail.php?slug=<?php echo urlencode($article['slug']); ?>" class="news-card-link">Lire plus</a>
                     </div>
-                    <h4 class="news-card-title">Automatisation et IA : boostez votre productivité avec des agents intelligents</h4>
-                    <p class="news-card-excerpt">Comment les entreprises africaines peuvent déployer des workflows automatisés pour gagner du temps et offrir une meilleure expérience client.</p>
-                    <a href="article-detail.php?slug=automatisation-agents-intelligents-productivite" class="news-card-link">Lire plus</a>
-                </div>
-            </article>
-
-            <article class="news-card">
-                <div class="news-card-image">
-                    <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80" alt="Success story">
-                    <span class="news-tag">Success Story</span>
-                </div>
-                <div class="news-card-body">
-                    <div class="news-card-meta">
-                        <span>03 Octobre 2025</span>
-                        <span>6 min</span>
-                    </div>
-                    <h4 class="news-card-title">Success Story : comment EventPro a multiplié ses ventes par 3 avec Jeton</h4>
-                    <p class="news-card-excerpt">Étude de cas détaillée sur la transformation digitale d'un acteur de l'événementiel grâce à notre solution sectorielle.</p>
-                    <a href="article-detail.php?slug=success-story-eventpro-jeton" class="news-card-link">Lire plus</a>
-                </div>
-            </article>
-
-            <article class="news-card">
-                <div class="news-card-image">
-                    <img src="assets/images/marqueting.avif" alt="Marketing digital">
-                    <span class="news-tag">Marketing</span>
-                </div>
-                <div class="news-card-body">
-                    <div class="news-card-meta">
-                        <span>29 Septembre 2025</span>
-                        <span>7 min</span>
-                    </div>
-                    <h4 class="news-card-title">Marketing digital : 10 stratégies qui fonctionnent en Afrique de l'Ouest</h4>
-                    <p class="news-card-excerpt">Social commerce, influence locale, automation… les leviers marketing à privilégier pour accélérer sa croissance.</p>
-                    <a href="article-detail.php?slug=strategies-marketing-afrique-ouest" class="news-card-link">Lire plus</a>
-                </div>
-            </article>
-
-            <article class="news-card">
-                <div class="news-card-image">
-                    <img src="https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?auto=format&fit=crop&w=800&q=80" alt="Data analytics">
-                    <span class="news-tag">Analytics</span>
-                </div>
-                <div class="news-card-body">
-                    <div class="news-card-meta">
-                        <span>21 Septembre 2025</span>
-                        <span>6 min</span>
-                    </div>
-                    <h4 class="news-card-title">Data analytics : transformez vos données en décisions stratégiques</h4>
-                    <p class="news-card-excerpt">Mettre en place une culture data-driven pour piloter ses opérations et identifier les opportunités de croissance.</p>
-                    <a href="article-detail.php?slug=data-analytics-decisions-strategiques" class="news-card-link">Lire plus</a>
-                </div>
-            </article>
+                </article>
+            <?php endforeach; ?>
         </div>
-
         <div class="news-footer">
-            <a href="articles.php" class="btn-news-outline">
-                Voir plus d'articles
-                <i class="bi bi-arrow-right"></i>
-            </a>
+            <a href="articles.php" class="btn btn-outline-primary mt-4">Voir toutes les actualités</a>
         </div>
     </div>
 </section>
@@ -910,22 +855,115 @@ include 'includes/header.php';
             <p class="partners-subtitle">Ils co-construisent avec nous l’avenir du digital en Afrique.</p>
         </div>
         <div class="partners-grid">
-            <div class="partner-card">
-                <div class="partner-icon partner-tech">P</div>
-                <span class="partner-label">Technologie</span>
-            </div>
-            <div class="partner-card">
-                <div class="partner-icon partner-innovation">P</div>
-                <span class="partner-label">Innovation</span>
-            </div>
-            <div class="partner-card">
-                <div class="partner-icon partner-finance">P</div>
-                <span class="partner-label">Finance</span>
-            </div>
-            <div class="partner-card">
-                <div class="partner-icon partner-education">P</div>
-                <span class="partner-label">Éducation</span>
-            </div>
+            <div class="partners-marquee-container">
+                <div class="partners-marquee-track">
+                    <div class="partner-card">
+                        <div class="partner-icon partner-tech">
+                            <img src="./assets/images/Boutique paysanne CI.jpeg" alt="boutique" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon partner-innovation">
+                            <img src="./assets/images/1.jpg" alt="LA PAIX TRAITEUR" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon partner-finance">
+                            <img src="./assets/images/By-So'ba - Lyon.JPG" alt="By-So'ba - Lyon" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon partner-education">
+                            <img src="./assets/images/CICBAD.jpeg" alt="CICBAD" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon partner-tech">
+                            <img src="./assets/images/IMG_3700.jpg" alt="SOGIM-C sarl" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon partner-">
+                            <img src="./assets/images/LOGO RES'zac-Dakar.png" alt="RES'zac-Dakar" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon partner-finance">
+                            <img src="./assets/images/PLC-CI.jpeg" alt="PLC-CI" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon partner-education">
+                            <img src="./assets/images/Walo Up Dagana.png" alt="Walo Up Dagana" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <!-- Repeat cards for seamless looping effect -->
+                    <div class="partner-card">
+                        <div class="partner-icon partner-tech">
+                            <img src="./assets/images/Boutique paysanne CI.jpeg" alt="boutique" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon partner-innovation">
+                            <img src="./assets/images/1.jpg" alt="LA PAIX TRAITEUR" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon partner-finance">
+                            <img src="./assets/images/By-So'ba - Lyon.JPG" alt="By-So'ba - Lyon" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon partner-education">
+                            <img src="./assets/images/CICBAD.jpeg" alt="CICBAD" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon partner-tech">
+                            <img src="./assets/images/IMG_3700.jpg" alt="SOGIM-C sarl" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon partner-">
+                            <img src="./assets/images/LOGO RES'zac-Dakar.png" alt="RES'zac-Dakar" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon partner-finance">
+                            <img src="./assets/images/PLC-CI.jpeg" alt="PLC-CI" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon partner-education">
+                            <img src="./assets/images/Walo Up Dagana.png" alt="Walo Up Dagana" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <script>
+                var marquee = document.querySelector('.partners-marquee-track');
+                if (!marquee) return;
+                marquee.parentElement.addEventListener('mouseenter', function() {
+                    marquee.style.animationPlayState = 'paused';
+                });
+                marquee.parentElement.addEventListener('mouseleave', function() {
+                    marquee.style.animationPlayState = 'running';
+                });
+            </script>
         </div>
     </div>
 </section>
@@ -935,7 +973,7 @@ include 'includes/header.php';
     <div class="container">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="cta-title text-white mb-3">Prêt à Transformer Votre Entreprise ?</h2>
+                <h2 class="cta-title text-white mb-3">Prêt à transformer votre entreprise ?</h2>
                 <p class="cta-subtitle text-white mb-4">Rejoignez les entreprises qui ont choisi Kanzey.co pour leur transformation digitale. Nos experts vous accompagnent à chaque étape.</p>
                 <div class="d-flex justify-content-center align-items-center flex-wrap" style="gap: 16px;">
                     <a href="#" class="btn btn-cta-white" style="display: flex; align-items: center; gap: 8px; min-width: 270px; justify-content: center;">

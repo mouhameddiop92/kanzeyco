@@ -1,24 +1,19 @@
 <?php
-$articles = include __DIR__ . '/includes/articles-data.php';
-$requestedSlug = $_GET['slug'] ?? ($articles[0]['slug'] ?? null);
+require_once 'includes/articles-db.php';
+$requestedSlug = $_GET['slug'] ?? null;
 $article = null;
-
 if ($requestedSlug) {
-    foreach ($articles as $item) {
-        if ($item['slug'] === $requestedSlug) {
-            $article = $item;
-            break;
-        }
-    }
+    $article = getArticleBySlug($requestedSlug);
 }
-
-$notFound = false;
-if (!$article && $articles) {
+if (!$article) {
+    // Fallback au premier article existant, ou message d'erreur
+    $articles = getArticles();
+    $article = $articles[0] ?? null;
     $notFound = true;
-    $article = $articles[0];
+} else {
+    $notFound = false;
 }
-
-$relatedArticles = array_filter($articles, function ($item) use ($article) {
+$relatedArticles = array_filter(getArticles(), function($item) use ($article) {
     return $item['slug'] !== $article['slug'];
 });
 $relatedArticles = array_slice(array_values($relatedArticles), 0, 3);

@@ -2506,7 +2506,7 @@ Team Section
 .partner-card {
     background: var(--background);
     border-radius: 26px;
-    padding: 32px 20px;
+    padding: 20px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2583,6 +2583,43 @@ Team Section
 
 .partners-section.is-visible .partner-card:nth-child(4) {
     animation-delay: 0.5s;
+}
+
+.partners-marquee-container {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    /* Optional: adjust height for your cards */
+    min-height: 140px;
+}
+.partners-marquee-track {
+    display: flex;
+    width: max-content;
+    animation: partners-marquee-scroll 30s linear infinite;
+    align-items: stretch;
+    gap: 20px;
+}
+@keyframes partners-marquee-scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+/* Hide scrollbar for track */
+.partners-marquee-track::-webkit-scrollbar { display: none; }
+ /* Espace entre les partenaires dans le défilement (marquee) */
+ .partners-marquee-track {
+    gap: 32px !important; /* Augmente l'espace horizontal */
+}
+.partner-card {
+    margin-right: 0px !important; /* Empêche un triple cumul de gap et margin */
+}
+@media (max-width: 576px) {
+    .partners-marquee-track {
+        gap: 18px !important;
+    }
 }
 
 /* ============================================
@@ -3029,6 +3066,7 @@ Footer
     justify-content: space-between;
     align-items: center;
     padding-top: 8px;
+    position: relative;
 }
 
 .footer-copyright,
@@ -3036,6 +3074,26 @@ Footer
     color: rgba(255, 255, 255, 0.75);
     font-size: 0.9rem;
     margin: 0;
+}
+
+/* Lien secret vers le dashboard admin */
+.admin-secret-link {
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    color: rgba(255, 255, 255, 0.1);
+    font-size: 4px;
+    text-decoration: none;
+    opacity: 0.05;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+    z-index: 10;
+    line-height: 1;
+}
+
+.admin-secret-link:hover {
+    opacity: 0.3;
+    color: rgba(255, 255, 255, 0.5);
 }
 
 @media (max-width: 992px) {

@@ -1,5 +1,7 @@
 <?php
-$articles = include __DIR__ . '/includes/articles-data.php';
+require_once 'includes/articles-db.php';
+$articles = getArticles();
+
 $featuredArticle = $articles[0] ?? null;
 ?>
 <?php include 'includes/header.php'; ?>
@@ -72,5 +74,3 @@ $featuredArticle = $articles[0] ?? null;
 </section>
 
 <?php include 'includes/footer.php'; ?>
-
-
