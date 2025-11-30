@@ -135,6 +135,7 @@ function getDashboardStats()
             'total_views' => 12450,
             'total_users' => 1,
             'new_comments' => 0,
+            'total_newsletter' => 0,
             'recent_articles' => 3,
             'popular_articles' => 5
         ];
@@ -146,10 +147,20 @@ function getDashboardStats()
         $stmt = $pdo->query($sql);
         $totalArticles = $stmt->fetch()['total'];
 
-        // Total de vues
-        $sql = "SELECT SUM(views) as total FROM articles";
-        $stmt = $pdo->query($sql);
-        $totalViews = $stmt->fetch()['total'] ?? 0;
+        // Total de vues : privilégier article_views si elle existe, sinon articles.views
+        $totalViews = 0;
+        $tableExists = (bool)$pdo->query("SHOW TABLES LIKE 'article_views'")->fetch();
+        if ($tableExists) {
+            $sql = "SELECT COUNT(*) as total FROM article_views";
+            $stmt = $pdo->query($sql);
+            $totalViews = (int)($stmt->fetch()['total'] ?? 0);
+        }
+        // Si article_views n'existe pas ou est vide, utiliser SUM(views) de articles
+        if ($totalViews === 0) {
+            $sql = "SELECT SUM(views) as total FROM articles";
+            $stmt = $pdo->query($sql);
+            $totalViews = (int)($stmt->fetch()['total'] ?? 0);
+        }
 
         // Total d'utilisateurs
         $sql = "SELECT COUNT(*) as total FROM users WHERE status = 'active'";
@@ -166,6 +177,7 @@ function getDashboardStats()
             'total_views' => (int)$totalViews,
             'total_users' => (int)$totalUsers,
             'new_comments' => (int)$newComments,
+            'total_newsletter' => (int)($pdo->query("SELECT COUNT(*) as total FROM newsletter WHERE status = 'active'")->fetch()['total'] ?? 0),
             'recent_articles' => (int)$totalArticles > 3 ? 3 : (int)$totalArticles,
             'popular_articles' => 5
         ];

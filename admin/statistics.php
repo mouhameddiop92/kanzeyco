@@ -3,6 +3,202 @@ $pageTitle = "Statistiques";
 require_once 'includes/admin-header.php';
 
 $stats = getDashboardStats();
+
+// Période (7, 30, 90 jours)
+$days = isset($_GET['days']) ? max(7, (int)$_GET['days']) : 30;
+
+// Données par défaut (repli si la BDD ou les tables manquent)
+$viewsLabels = [];
+$viewsData = [];
+$categoryLabels = [];
+$categoryData = [];
+$topArticles = [];
+
+$pdo = getDBConnection();
+if ($pdo) {
+    try {
+        // Vérifier si la table article_views existe
+        $tableExists = (bool)$pdo->query("SHOW TABLES LIKE 'article_views'")->fetch();
+
+        if ($tableExists) {
+            // Déterminer le nom de la colonne date (création)
+            $cols = $pdo->query("SHOW COLUMNS FROM article_views")->fetchAll(PDO::FETCH_ASSOC);
+            $fields = array_map(function ($c) {
+                return $c['Field'];
+            }, $cols);
+            $dateCol = null;
+            foreach (['created_at', 'date_created', 'created', 'timestamp', 'date'] as $c) {
+                if (in_array($c, $fields)) {
+                    $dateCol = $c;
+                    break;
+                }
+            }
+            if (!$dateCol) {
+                // fallback au premier champ si inconnu
+                $dateCol = $fields[0] ?? 'created_at';
+            }
+
+            // Récupérer les vues agrégées par jour sur la période
+            $sql = "SELECT DATE($dateCol) AS day, COUNT(*) AS views
+                    FROM article_views
+                    WHERE $dateCol >= DATE_SUB(CURDATE(), INTERVAL :days DAY)
+                    GROUP BY day
+                    ORDER BY day ASC";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':days', $days, PDO::PARAM_INT);
+            $stmt->execute();
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Construire un tableau complet de jours (pour afficher les jours sans vues)
+            $map = [];
+            foreach ($rows as $r) $map[$r['day']] = (int)$r['views'];
+
+            $dates = [];
+            $data = [];
+            for ($i = $days - 1; $i >= 0; $i--) {
+                $d = (new DateTime())->modify("-{$i} days")->format('Y-m-d');
+                $dates[] = $d;
+                $data[] = isset($map[$d]) ? $map[$d] : 0;
+            }
+
+            $viewsLabels = $dates;
+            $viewsData = $data;
+
+            // Répartition par catégorie (sur la même période)
+            $articlesTableExists = (bool)$pdo->query("SHOW TABLES LIKE 'articles'")->fetch();
+            if ($articlesTableExists) {
+                // Vérifier si la table articles a la colonne 'category'
+                $colsA = $pdo->query("SHOW COLUMNS FROM articles")->fetchAll(PDO::FETCH_ASSOC);
+                $fieldsA = array_map(function ($c) {
+                    return $c['Field'];
+                }, $colsA);
+                $hasCategory = in_array('category', $fieldsA);
+
+                if ($tableExists && $hasCategory) {
+                    $sql = "SELECT a.category AS category, COUNT(av.article_id) AS views
+                            FROM articles a
+                            LEFT JOIN article_views av ON a.article_id = av.article_id
+                              AND av.$dateCol >= DATE_SUB(CURDATE(), INTERVAL :days DAY)
+                            GROUP BY a.category
+                            ORDER BY views DESC";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->bindValue(':days', $days, PDO::PARAM_INT);
+                    $stmt->execute();
+                    $cats = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    foreach ($cats as $c) {
+                        $label = $c['category'] ?: 'Non catégorisé';
+                        $categoryLabels[] = $label;
+                        $categoryData[] = (int)$c['views'];
+                    }
+                } else {
+                    // Fallback: utiliser la colonne views dans articles si présente
+                    if (in_array('views', $fieldsA)) {
+                        $sql = "SELECT COALESCE(category, 'Non catégorisé') AS category, SUM(views) AS views
+                                FROM articles
+                                GROUP BY category
+                                ORDER BY views DESC";
+                        $stmt = $pdo->query($sql);
+                        $cats = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        foreach ($cats as $c) {
+                            $categoryLabels[] = $c['category'];
+                            $categoryData[] = (int)$c['views'];
+                        }
+                    }
+                }
+
+                // Top articles (par vues) — aligner avec les données du dashboard
+                // Si article_views existe, compter les entrées ; sinon utiliser articles.views
+                if ($tableExists) {
+                    // Compter les vues depuis article_views, mais créer l'agrégat sur le nombre de lignes
+                    $sql = "SELECT a.title AS title, COUNT(av.article_id) AS views
+                            FROM articles a
+                            LEFT JOIN article_views av ON a.article_id = av.article_id
+                            WHERE a.status = 'published'
+                            GROUP BY a.article_id
+                            HAVING views > 0
+                            ORDER BY views DESC
+                            LIMIT 5";
+                    $stmt = $pdo->query($sql);
+                    $tops = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    // Si aucune donnée en article_views, repli sur articles.views
+                    if (empty($tops) && in_array('views', $fieldsA)) {
+                        $sql = "SELECT title, views FROM articles WHERE status = 'published' ORDER BY views DESC LIMIT 5";
+                        $stmt = $pdo->query($sql);
+                        $tops = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    }
+                    foreach ($tops as $t) {
+                        $topArticles[] = [
+                            'title' => $t['title'] ?: 'Untitled',
+                            'views' => (int)$t['views']
+                        ];
+                    }
+                } else {
+                    // Fallback: articles.views
+                    if (in_array('views', $fieldsA)) {
+                        $sql = "SELECT title, views FROM articles WHERE status = 'published' ORDER BY views DESC LIMIT 5";
+                        $stmt = $pdo->query($sql);
+                        $tops = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        foreach ($tops as $t) {
+                            $topArticles[] = ['title' => $t['title'], 'views' => (int)$t['views']];
+                        }
+                    }
+                }
+            }
+        } else {
+            // Pas de table article_views : utiliser la colonne views dans articles si existante
+            if ($pdo->query("SHOW TABLES LIKE 'articles'")->fetch()) {
+                $colsA = $pdo->query("SHOW COLUMNS FROM articles")->fetchAll(PDO::FETCH_ASSOC);
+                $fieldsA = array_map(function ($c) {
+                    return $c['Field'];
+                }, $colsA);
+
+                if (in_array('views', $fieldsA)) {
+                    // Top articles
+                    $sql = "SELECT title, views FROM articles ORDER BY views DESC LIMIT 5";
+                    $stmt = $pdo->query($sql);
+                    $tops = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($tops as $t) $topArticles[] = ['title' => $t['title'], 'views' => (int)$t['views']];
+
+                    // Répartition par catégorie
+                    if (in_array('category', $fieldsA)) {
+                        $sql = "SELECT COALESCE(category, 'Non catégorisé') AS category, SUM(views) AS views
+                                FROM articles GROUP BY category ORDER BY views DESC";
+                        $stmt = $pdo->query($sql);
+                        $cats = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        foreach ($cats as $c) {
+                            $categoryLabels[] = $c['category'];
+                            $categoryData[] = (int)$c['views'];
+                        }
+                    }
+
+                    // Pour l'évolution des vues, on ne peut pas reconstituer les jours sans article_views
+                    $viewsLabels = [];
+                    $viewsData = [];
+                }
+            }
+        }
+    } catch (PDOException $e) {
+        error_log('Statistics error: ' . $e->getMessage());
+        // garder les valeurs par défaut vides
+    }
+}
+
+// Si aucune donnée de période, remplir par des zéros (pour éviter erreurs JS)
+if (empty($viewsLabels)) {
+    for ($i = $days - 1; $i >= 0; $i--) {
+        $d = (new DateTime())->modify("-{$i} days")->format('Y-m-d');
+        $viewsLabels[] = $d;
+        $viewsData[] = 0;
+    }
+}
+
+// Données JSON pour JS
+$viewsLabelsJson = json_encode($viewsLabels);
+$viewsDataJson = json_encode($viewsData);
+$categoryLabelsJson = json_encode($categoryLabels);
+$categoryDataJson = json_encode($categoryData);
+$topArticlesJson = json_encode($topArticles);
 ?>
 
 <div class="page-header">
@@ -26,7 +222,7 @@ $stats = getDashboardStats();
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-3 mb-3">
         <div class="stat-card">
             <div class="stat-icon stat-icon-success">
@@ -41,7 +237,7 @@ $stats = getDashboardStats();
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-3 mb-3">
         <div class="stat-card">
             <div class="stat-icon stat-icon-info">
@@ -56,7 +252,7 @@ $stats = getDashboardStats();
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-3 mb-3">
         <div class="stat-card">
             <div class="stat-icon stat-icon-warning">
@@ -79,14 +275,16 @@ $stats = getDashboardStats();
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">
-                    <i class="fas fa-chart-area me-2"></i>Évolution des vues (30 derniers jours)
+                    <i class="fas fa-chart-area me-2"></i>Évolution des vues (<?php echo $days; ?> derniers jours)
                 </h5>
                 <div class="card-actions">
-                    <select class="form-select form-select-sm" id="chartPeriod">
-                        <option value="7">7 jours</option>
-                        <option value="30" selected>30 jours</option>
-                        <option value="90">90 jours</option>
-                    </select>
+                    <form method="get" id="periodForm">
+                        <select class="form-select form-select-sm" id="chartPeriod" name="days" onchange="document.getElementById('periodForm').submit();">
+                            <option value="7" <?php echo $days == 7 ? 'selected' : ''; ?>>7 jours</option>
+                            <option value="30" <?php echo $days == 30 ? 'selected' : ''; ?>>30 jours</option>
+                            <option value="90" <?php echo $days == 90 ? 'selected' : ''; ?>>90 jours</option>
+                        </select>
+                    </form>
                 </div>
             </div>
             <div class="card-body">
@@ -94,7 +292,7 @@ $stats = getDashboardStats();
             </div>
         </div>
     </div>
-    
+
     <!-- Répartition par catégorie -->
     <div class="col-lg-4 mb-4">
         <div class="card">
@@ -121,46 +319,27 @@ $stats = getDashboardStats();
             </div>
             <div class="card-body">
                 <div class="top-list">
-                    <div class="top-item">
-                        <div class="top-rank">1</div>
-                        <div class="top-content">
-                            <strong>Comment la digitalisation transforme l'événementiel</strong>
-                            <small class="text-muted">2,450 vues</small>
-                        </div>
-                    </div>
-                    <div class="top-item">
-                        <div class="top-rank">2</div>
-                        <div class="top-content">
-                            <strong>PropTech 2025 : les tendances</strong>
-                            <small class="text-muted">1,890 vues</small>
-                        </div>
-                    </div>
-                    <div class="top-item">
-                        <div class="top-rank">3</div>
-                        <div class="top-content">
-                            <strong>Automatisation et IA : boostez votre productivité</strong>
-                            <small class="text-muted">1,520 vues</small>
-                        </div>
-                    </div>
-                    <div class="top-item">
-                        <div class="top-rank">4</div>
-                        <div class="top-content">
-                            <strong>Success Story : EventPro multiplie ses ventes</strong>
-                            <small class="text-muted">1,280 vues</small>
-                        </div>
-                    </div>
-                    <div class="top-item">
-                        <div class="top-rank">5</div>
-                        <div class="top-content">
-                            <strong>Marketing digital : 10 stratégies efficaces</strong>
-                            <small class="text-muted">1,150 vues</small>
-                        </div>
-                    </div>
+                    <?php
+                    if (!empty($topArticles)) {
+                        $rank = 1;
+                        foreach ($topArticles as $t) {
+                            echo '<div class="top-item">';
+                            echo '<div class="top-rank">' . $rank . '</div>';
+                            echo '<div class="top-content">';
+                            echo '<strong>' . htmlspecialchars($t['title']) . '</strong>';
+                            echo '<small class="text-muted">' . number_format($t['views'], 0, ',', ' ') . ' vues</small>';
+                            echo '</div></div>';
+                            $rank++;
+                        }
+                    } else {
+                        echo '<p class="text-muted">Aucune donnée disponible</p>';
+                    }
+                    ?>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <!-- Activité récente -->
     <div class="col-lg-6 mb-4">
         <div class="card">
@@ -177,7 +356,7 @@ $stats = getDashboardStats();
                         </div>
                         <div class="activity-content">
                             <strong>Nouvelle vue</strong>
-                            <small class="text-muted d-block">Article "PropTech 2025" - Il y a 5 min</small>
+                            <small class="text-muted d-block">Consulter le tableau des vues pour les détails</small>
                         </div>
                     </div>
                     <div class="activity-item">
@@ -186,25 +365,7 @@ $stats = getDashboardStats();
                         </div>
                         <div class="activity-content">
                             <strong>Nouveau commentaire</strong>
-                            <small class="text-muted d-block">Sur "Digitalisation événementiel" - Il y a 15 min</small>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-icon bg-info">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                        <div class="activity-content">
-                            <strong>Nouvel utilisateur</strong>
-                            <small class="text-muted d-block">Inscription - Il y a 1h</small>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-icon bg-warning">
-                            <i class="fas fa-share"></i>
-                        </div>
-                        <div class="activity-content">
-                            <strong>Article partagé</strong>
-                            <small class="text-muted d-block">"Automatisation et IA" - Il y a 2h</small>
+                            <small class="text-muted d-block">Vérifier la section commentaires</small>
                         </div>
                     </div>
                 </div>
@@ -214,66 +375,63 @@ $stats = getDashboardStats();
 </div>
 
 <script>
-// Graphique de vues sur 30 jours
-const ctx = document.getElementById('viewsChart').getContext('2d');
-const viewsChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ['J1', 'J2', 'J3', 'J4', 'J5', 'J6', 'J7', 'J8', 'J9', 'J10', 'J11', 'J12', 'J13', 'J14', 'J15', 'J16', 'J17', 'J18', 'J19', 'J20', 'J21', 'J22', 'J23', 'J24', 'J25', 'J26', 'J27', 'J28', 'J29', 'J30'],
-        datasets: [{
-            label: 'Vues',
-            data: [320, 450, 380, 520, 480, 610, 580, 730, 680, 720, 650, 780, 710, 820, 750, 880, 810, 920, 850, 960, 890, 1000, 930, 1020, 950, 1040, 970, 1060, 990, 1080],
-            borderColor: '#1e2a5e',
-            backgroundColor: 'rgba(30, 42, 94, 0.1)',
-            tension: 0.4,
-            fill: true
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
-});
+    const viewsLabels = <?php echo $viewsLabelsJson; ?>;
+    const viewsData = <?php echo $viewsDataJson; ?>;
+    const categoryLabels = <?php echo $categoryLabelsJson; ?>;
+    const categoryData = <?php echo $categoryDataJson; ?>;
 
-// Graphique de répartition par catégorie
-const ctx2 = document.getElementById('categoryChart').getContext('2d');
-const categoryChart = new Chart(ctx2, {
-    type: 'doughnut',
-    data: {
-        labels: ['Événementiel', 'Immobilier', 'Innovation', 'Marketing', 'Analytics', 'Success Story'],
-        datasets: [{
-            data: [25, 20, 18, 15, 12, 10],
-            backgroundColor: [
-                '#1e2a5e',
-                '#55679c',
-                '#7c93c3',
-                '#9eb4d9',
-                '#c4d5ee',
-                '#e6ecf5'
-            ]
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'bottom'
+    // Graphique de vues
+    const ctx = document.getElementById('viewsChart').getContext('2d');
+    const viewsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: viewsLabels,
+            datasets: [{
+                label: 'Vues',
+                data: viewsData,
+                borderColor: '#1e2a5e',
+                backgroundColor: 'rgba(30, 42, 94, 0.1)',
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
             }
         }
-    }
-});
+    });
+
+    // Graphique de répartition par catégorie
+    const ctx2 = document.getElementById('categoryChart').getContext('2d');
+    const categoryChart = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+            labels: categoryLabels,
+            datasets: [{
+                data: categoryData,
+                backgroundColor: ['#1e2a5e', '#55679c', '#7c93c3', '#9eb4d9', '#c4d5ee', '#e6ecf5']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
 </script>
 
 <?php require_once 'includes/admin-footer.php'; ?>
-

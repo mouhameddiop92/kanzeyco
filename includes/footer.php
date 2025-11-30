@@ -24,6 +24,10 @@
                             <span>contact@kanzey.co</span>
                         </li>
                         <li>
+                            <i class="bi bi-telephone"></i>
+                            <span>+221 78 956 36 38</span>
+                        </li>
+                        <li>
                             <i class="bi bi-geo-alt"></i>
                             <span>Afrique de l'Ouest</span>
                         </li>

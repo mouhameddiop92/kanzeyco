@@ -751,7 +751,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
             <div class="col-12 text-center">
                 <h2 class="cta-title text-white mb-3">Restez informé de nos actualités</h2>
                 <p class="cta-subtitle text-white mb-4">Recevez notre newsletter mensuelle avec les dernières tendances, conseils et success stories</p>
-                <form class="cta-newsletter-form d-flex justify-content-center align-items-center flex-wrap" action="#" method="post" style="gap: 10px;">
+                <form id="newsletterForm" class="cta-newsletter-form d-flex justify-content-center align-items-center flex-wrap" method="post" style="gap: 10px;">
                     <input type="email" class="form-control" name="cta_newsletter_email" placeholder="Votre email" required style="max-width: 320px;">
                     <button type="submit" class="btn btn-cta-white">S'abonner</button>
                 </form>
@@ -955,17 +955,17 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                         <span class="partner-label"> </span>
                     </div>
                     <script>
-                var marquee = document.querySelector('.partners-marquee-track');
-                if (!marquee) return;
-                marquee.parentElement.addEventListener('mouseenter', function() {
-                    marquee.style.animationPlayState = 'paused';
-                });
-                marquee.parentElement.addEventListener('mouseleave', function() {
-                    marquee.style.animationPlayState = 'running';
-                });
-            </script>
-        </div>
-    </div>
+                        var marquee = document.querySelector('.partners-marquee-track');
+                        if (!marquee) return;
+                        marquee.parentElement.addEventListener('mouseenter', function() {
+                            marquee.style.animationPlayState = 'paused';
+                        });
+                        marquee.parentElement.addEventListener('mouseleave', function() {
+                            marquee.style.animationPlayState = 'running';
+                        });
+                    </script>
+                </div>
+            </div>
 </section>
 
 <!-- Prêt à Transformer Votre Entreprise ? -->
@@ -976,18 +976,18 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                 <h2 class="cta-title text-white mb-3">Prêt à transformer votre entreprise ?</h2>
                 <p class="cta-subtitle text-white mb-4">Rejoignez les entreprises qui ont choisi Kanzey.co pour leur transformation digitale. Nos experts vous accompagnent à chaque étape.</p>
                 <div class="d-flex justify-content-center align-items-center flex-wrap" style="gap: 16px;">
-                    <a href="#" class="btn btn-cta-white" style="display: flex; align-items: center; gap: 8px; min-width: 270px; justify-content: center;">
+                    <a href="#contact" class="btn btn-cta-white" style="display: flex; align-items: center; gap: 8px; min-width: 270px; justify-content: center;">
                         Demander une démo gratuite
                         <span class="ms-2" style="font-size:1.15em;"><i class="bi bi-arrow-right"></i></span>
                     </a>
-                    <a href="#" class="btn btn-cta-white" style="display: flex; align-items: center; gap: 8px; min-width: 270px; justify-content: center;">
+                    <a href="https://tally.so/r/nGk88k" target="_blank" class="btn btn-cta-white" style="display: flex; align-items: center; gap: 8px; min-width: 270px; justify-content: center;">
                         Discuter avec un expert
                     </a>
                 </div>
                 <div class="d-flex justify-content-center align-items-center flex-wrap mt-4" style="gap: 24px; color: #fff; font-size: 1.07rem;">
                     <div class="d-flex align-items-center" style="gap:10px;">
                         <i class="bi bi-telephone" style="font-size: 1.2em;"></i>
-                        <span>+221 XX XXX XX XX</span>
+                        <span>+221 78 956 36 38</span>
                     </div>
                     <span style="font-size:2em; opacity:0.45;">&middot;</span>
                     <div class="d-flex align-items-center" style="gap:10px;">
@@ -1008,7 +1008,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
             <p class="contact-subtitle">Une question ? Un projet ? Notre équipe est là pour vous accompagner.</p>
         </div>
         <div class="contact-content">
-            <form class="contact-form-card">
+            <form id="contactForm" class="contact-form-card" method="post">
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="contact-name">Nom complet <span>*</span></label>
@@ -1053,7 +1053,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                     </div>
                     <div class="contact-card-content">
                         <h3>Téléphone</h3>
-                        <p>+221 XX XXX XX XX</p>
+                        <p>+221 78 956 36 38</p>
                     </div>
                 </div>
                 <div class="contact-card">
@@ -1081,3 +1081,102 @@ $otherArticles = array_slice($recentArticles, 1, 3);
 <?php
 include 'includes/footer.php';
 ?>
+
+<script>
+    // Fonction pour afficher une notification toast
+    function showNotification(message, type = 'success') {
+        const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        const toast = document.createElement('div');
+        toast.className = `alert ${alertClass} position-fixed top-0 end-0 m-3`;
+        toast.style.zIndex = '9999';
+        toast.innerHTML = '<i class="bi ' + (type === 'success' ? 'bi-check-circle' : 'bi-exclamation-circle') + ' me-2"></i>' + message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const newsletterForm = document.getElementById('newsletterForm');
+
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(newsletterForm);
+                const submitBtn = newsletterForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+
+                // Désactiver le bouton
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Envoi...';
+
+                fetch('includes/process-newsletter.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showNotification(data.message, 'success');
+                            // Réinitialiser le formulaire
+                            newsletterForm.reset();
+                        } else {
+                            showNotification(data.message, 'danger');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        showNotification('Erreur lors de l\'envoi', 'danger');
+                    })
+                    .finally(() => {
+                        // Réactiver le bouton
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalText;
+                    });
+            });
+        }
+
+        // Gestionnaire du formulaire de contact
+        const contactForm = document.getElementById('contactForm');
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(contactForm);
+                const submitBtn = contactForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+
+                // Désactiver le bouton
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Envoi...';
+
+                fetch('includes/process-contact.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showNotification(data.message, 'success');
+                            // Réinitialiser le formulaire
+                            contactForm.reset();
+                        } else {
+                            showNotification(data.message, 'danger');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        showNotification('Erreur lors de l\'envoi', 'danger');
+                    })
+                    .finally(() => {
+                        // Réactiver le bouton
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalText;
+                    });
+            });
+        }
+    });
+</script>

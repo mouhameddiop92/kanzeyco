@@ -4,8 +4,23 @@ require_once 'includes/admin-header.php';
 require_once '../includes/articles-data.php';
 
 $stats = getDashboardStats();
+error_log("Dashboard stats: " . json_encode($stats));
+
 $articles = require '../includes/articles-data.php';
 $recentArticles = array_slice($articles, 0, 5);
+
+// Récupérer le nombre de contacts non lus
+$unreadContacts = 0;
+$pdo = getDBConnection();
+if ($pdo) {
+    try {
+        $sql = "SELECT COUNT(*) as total FROM contacts WHERE status = 'new'";
+        $stmt = $pdo->query($sql);
+        $unreadContacts = (int)($stmt->fetch()['total'] ?? 0);
+    } catch (PDOException $e) {
+        error_log("Erreur lors de la récupération des contacts: " . $e->getMessage());
+    }
+}
 ?>
 
 <div class="page-header">
@@ -26,19 +41,19 @@ $recentArticles = array_slice($articles, 0, 5);
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-3 mb-3">
         <div class="stat-card">
             <div class="stat-icon stat-icon-success">
                 <i class="fas fa-eye"></i>
             </div>
             <div class="stat-content">
-                <h3 class="stat-value"><?php echo number_format($stats['total_views'], 0, ',', ' '); ?></h3>
+                <h3 class="stat-value"><?php echo number_format((int)($stats['total_views'] ?? 0), 0, ',', ' '); ?></h3>
                 <p class="stat-label">Vues totales</p>
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-3 mb-3">
         <div class="stat-card">
             <div class="stat-icon stat-icon-info">
@@ -50,15 +65,15 @@ $recentArticles = array_slice($articles, 0, 5);
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-3 mb-3">
         <div class="stat-card">
             <div class="stat-icon stat-icon-warning">
                 <i class="fas fa-comments"></i>
             </div>
             <div class="stat-content">
-                <h3 class="stat-value"><?php echo $stats['new_comments']; ?></h3>
-                <p class="stat-label">Nouveaux commentaires</p>
+                <h3 class="stat-value"><?php echo $unreadContacts; ?></h3>
+                <p class="stat-label">Nouveaux messages</p>
             </div>
         </div>
     </div>
@@ -88,23 +103,23 @@ $recentArticles = array_slice($articles, 0, 5);
                         </thead>
                         <tbody>
                             <?php foreach ($recentArticles as $article): ?>
-                            <tr>
-                                <td>
-                                    <strong><?php echo htmlspecialchars($article['title']); ?></strong>
-                                </td>
-                                <td>
-                                    <span class="badge bg-secondary"><?php echo htmlspecialchars($article['category']); ?></span>
-                                </td>
-                                <td><?php echo htmlspecialchars($article['date']); ?></td>
-                                <td>
-                                    <a href="articles.php?action=edit&slug=<?php echo $article['slug']; ?>" class="btn-icon" title="Modifier">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a href="../article-detail.php?slug=<?php echo $article['slug']; ?>" target="_blank" class="btn-icon" title="Voir">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>
+                                        <strong><?php echo htmlspecialchars($article['title']); ?></strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary"><?php echo htmlspecialchars($article['category']); ?></span>
+                                    </td>
+                                    <td><?php echo htmlspecialchars($article['date']); ?></td>
+                                    <td>
+                                        <a href="articles.php?action=edit&slug=<?php echo $article['slug']; ?>" class="btn-icon" title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="../article-detail.php?slug=<?php echo $article['slug']; ?>" target="_blank" class="btn-icon" title="Voir">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -112,7 +127,7 @@ $recentArticles = array_slice($articles, 0, 5);
             </div>
         </div>
     </div>
-    
+
     <!-- Graphique et activité récente -->
     <div class="col-lg-4 mb-4">
         <!-- Graphique de vues -->
@@ -126,7 +141,7 @@ $recentArticles = array_slice($articles, 0, 5);
                 <canvas id="viewsChart" height="200"></canvas>
             </div>
         </div>
-        
+
         <!-- Actions rapides -->
         <div class="card">
             <div class="card-header">
@@ -159,37 +174,36 @@ $recentArticles = array_slice($articles, 0, 5);
 </div>
 
 <script>
-// Graphique de vues
-const ctx = document.getElementById('viewsChart').getContext('2d');
-const viewsChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
-        datasets: [{
-            label: 'Vues',
-            data: [450, 520, 480, 610, 580, 730, 680],
-            borderColor: '#1e2a5e',
-            backgroundColor: 'rgba(30, 42, 94, 0.1)',
-            tension: 0.4,
-            fill: true
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            }
+    // Graphique de vues
+    const ctx = document.getElementById('viewsChart').getContext('2d');
+    const viewsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+            datasets: [{
+                label: 'Vues',
+                data: [450, 520, 480, 610, 580, 730, 680],
+                borderColor: '#1e2a5e',
+                backgroundColor: 'rgba(30, 42, 94, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
         },
-        scales: {
-            y: {
-                beginAtZero: true
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
             }
         }
-    }
-});
+    });
 </script>
 
 <?php require_once 'includes/admin-footer.php'; ?>
-

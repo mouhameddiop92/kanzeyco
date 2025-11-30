@@ -17,22 +17,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ============================================
 // Navbar Scroll Effect
 // ============================================
-window.addEventListener('scroll', function() {
+window.addEventListener('scroll', function () {
     const navbar = document.querySelector('.navbar');
     if (window.scrollY > 50) {
         navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
     } else {
         navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.05)';
     }
-});
-
-// ============================================
-// Contact Form Submission
-// ============================================
-document.querySelector('.contact-form-card')?.addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('Merci pour votre message! Nous vous contacterons bientôt.');
-    this.reset();
 });
 
 // ============================================
@@ -43,7 +34,7 @@ function animateImpactNumber(element) {
     let finalValue = 0;
     let suffix = '';
     let hasK = false;
-    
+
     // Extraire le nombre et le suffixe
     if (originalText.includes('K')) {
         // Gérer les cas comme "20K+"
@@ -61,15 +52,15 @@ function animateImpactNumber(element) {
         }
         suffix = originalText.replace(/\d+/, ''); // Garder le "+" ou autre
     }
-    
+
     if (finalValue === 0) return;
-    
+
     let current = 0;
     const duration = 2000; // 2 secondes
     const steps = 60;
     const increment = finalValue / steps;
     const stepDuration = duration / steps;
-    
+
     const timer = setInterval(() => {
         current += increment;
         if (current >= finalValue) {
@@ -94,7 +85,7 @@ function animateImpactNumber(element) {
 }
 
 // Observer pour les nouveaux chiffres d'impact
-const impactNumberObserver = new IntersectionObserver(function(entries) {
+const impactNumberObserver = new IntersectionObserver(function (entries) {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             const target = entry.target;
@@ -123,7 +114,7 @@ function initScrollAnimations() {
         rootMargin: '0px 0px -50px 0px'
     };
 
-    const sectionObserver = new IntersectionObserver(function(entries) {
+    const sectionObserver = new IntersectionObserver(function (entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 // Ajouter la classe is-visible pour déclencher les animations
@@ -140,7 +131,7 @@ function initScrollAnimations() {
         '.impact-section, .trust-section, .news-section, .about-section, .why-us-section, ' +
         '.team-section, .partners-section, .testimonials-section, .contact-section'
     );
-    
+
     sectionsToAnimate.forEach(section => {
         if (section) {
             sectionObserver.observe(section);
@@ -159,41 +150,41 @@ if (document.readyState === 'loading') {
 // ============================================
 // Accès secret au dashboard admin - Triple-clic sur le logo
 // ============================================
-(function() {
+(function () {
     'use strict';
-    
+
     let clickCount = 0;
     let clickTimer = null;
     const REQUIRED_CLICKS = 3; // Triple-clic requis
     const CLICK_TIMEOUT = 1000; // Temps maximum entre les clics (en ms)
-    
+
     // Gestion du triple-clic sur le logo pour accéder au dashboard admin
     const logo = document.getElementById('siteLogo') || document.getElementById('logoLink');
     if (logo) {
-        logo.addEventListener('click', function(e) {
+        logo.addEventListener('click', function (e) {
             clickCount++;
-            
+
             // Réinitialiser le compteur si trop de temps s'est écoulé
             if (clickTimer) {
                 clearTimeout(clickTimer);
             }
-            
-            clickTimer = setTimeout(function() {
+
+            clickTimer = setTimeout(function () {
                 clickCount = 0;
             }, CLICK_TIMEOUT);
-            
+
             // Si le triple-clic est atteint, rediriger vers le dashboard
             if (clickCount >= REQUIRED_CLICKS) {
                 e.preventDefault();
                 clickCount = 0;
                 clearTimeout(clickTimer);
-                
+
                 // Petit feedback visuel
                 logo.style.opacity = '0.5';
-                setTimeout(function() {
+                setTimeout(function () {
                     logo.style.opacity = '1';
                 }, 200);
-                
+
                 // Rediriger vers le dashboard admin
                 window.location.href = 'admin/';
             }
