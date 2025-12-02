@@ -35,20 +35,7 @@ function adminLogin($username, $password)
 {
     $pdo = getDBConnection();
 
-    // Si la BDD n'est pas disponible, utiliser l'authentification de fallback
-    if (!$pdo) {
-        // Fallback: authentification simple (à changer en production)
-        if ($username === 'admin' && $password === 'admin123') {
-            $_SESSION['admin_logged_in'] = true;
-            $_SESSION['admin_username'] = $username;
-            $_SESSION['admin_login_time'] = time();
-            return true;
-        }
-        return false;
-    }
-
     try {
-        // Utiliser une requête simple comme dans le test qui fonctionne
         // Essayer d'abord par username
         $sql = "SELECT user_id, username, email, password, role, status 
                 FROM users 
@@ -74,17 +61,6 @@ function adminLogin($username, $password)
 
         // Si l'utilisateur existe et que le mot de passe est correct
         if ($user && password_verify($password, $user['password'])) {
-            // Si le statut n'est pas 'active', le mettre à jour
-            if ($user['status'] !== 'active') {
-                try {
-                    $updateStatusSql = "UPDATE users SET status = 'active' WHERE user_id = ?";
-                    $updateStatusStmt = $pdo->prepare($updateStatusSql);
-                    $updateStatusStmt->execute([$user['user_id']]);
-                } catch (PDOException $e) {
-                    // Ignorer l'erreur, ce n'est pas critique
-                    error_log("Note: Erreur mise à jour statut: " . $e->getMessage());
-                }
-            }
 
             // Créer la session
             $_SESSION['admin_logged_in'] = true;

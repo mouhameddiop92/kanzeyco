@@ -553,8 +553,8 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <!-- Row 1 -->
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
-                                    <div class="trust-industry-icon trust-icon-event">
-                                        <span class="trust-icon-letter">E</span>
+                                    <div class="trust-industry-icon trust-icon-eventiel">
+                                        <img src="assets/images/CICBAD.jpeg" alt="CICBAB" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">Événementiel</p>
                                 </div>
@@ -562,7 +562,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon trust-icon-immobilier">
-                                        <span class="trust-icon-letter">I</span>
+                                        <img src="assets/images/1.jpg" alt="LA PAIX TRAITEUR" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">Immobilier</p>
                                 </div>
@@ -570,7 +570,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon trust-icon-ecommerce">
-                                        <span class="trust-icon-letter">S</span>
+                                        <img src="assets/images/Boutique paysanne CI.jpeg" alt="Boutique paysanne CI" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">E-commerce</p>
                                 </div>
@@ -578,7 +578,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon trust-icon-tech">
-                                        <span class="trust-icon-letter">T</span>
+                                        <img src="assets/images/By-So'ba - Lyon.JPG" alt="By-So'ba - Lyon" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">Technologie</p>
                                 </div>
@@ -587,7 +587,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon trust-icon-media">
-                                        <span class="trust-icon-letter">M</span>
+                                        <img src="assets/images/IMG_3700.jpg" alt="SOGIM-C sarl" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">Médias</p>
                                 </div>
@@ -595,7 +595,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon trust-icon-distribution">
-                                        <span class="trust-icon-letter">R</span>
+                                        <img src="assets/images/LOGO RES'zac-Dakar.png" alt="RES'zac-Dakar" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">Distribution</p>
                                 </div>
@@ -603,7 +603,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon trust-icon-services">
-                                        <span class="trust-icon-letter">F</span>
+                                        <img src="assets/images/PLC-CI.jpeg" alt="PLC-CI" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">Services</p>
                                 </div>
@@ -611,7 +611,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon trust-icon-publicite">
-                                        <span class="trust-icon-letter">C</span>
+                                        <img src="assets/images/Walo Up Dagana.png" alt="Walo Up Dagana" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">Publicité</p>
                                 </div>
@@ -851,7 +851,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
 <section class="partners-section py-5">
     <div class="container">
         <div class="partners-header text-center">
-            <h2 class="partners-title">Nos partenaires</h2>
+            <h2 class="partners-title">Nos outils digitaux</h2>
             <p class="partners-subtitle">Ils co-construisent avec nous l’avenir du digital en Afrique.</p>
         </div>
         <div class="partners-grid">
@@ -859,98 +859,74 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                 <div class="partners-marquee-track">
                     <div class="partner-card">
                         <div class="partner-icon partner-tech">
-                            <img src="./assets/images/Boutique paysanne CI.jpeg" alt="boutique" style="width: 220%; height: 200%;">
+                            <img src="./assets/images/figma.png" alt="figma" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon partner-innovation">
-                            <img src="./assets/images/1.jpg" alt="LA PAIX TRAITEUR" style="width: 220%; height: 200%;">
+                            <img src="./assets/images/N8N.jpg" alt="N8N" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon partner-finance">
-                            <img src="./assets/images/By-So'ba - Lyon.JPG" alt="By-So'ba - Lyon" style="width: 220%; height: 200%;">
+                            <img src="./assets/images/python.png" alt="Python" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon partner-education">
-                            <img src="./assets/images/CICBAD.jpeg" alt="CICBAD" style="width: 220%; height: 200%;">
+                            <img src="./assets/images/react.png" alt="React" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon partner-tech">
-                            <img src="./assets/images/IMG_3700.jpg" alt="SOGIM-C sarl" style="width: 220%; height: 200%;">
+                            <img src="./assets/images/Tally.so-Logo.jpg" alt="Tally" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon partner-">
-                            <img src="./assets/images/LOGO RES'zac-Dakar.png" alt="RES'zac-Dakar" style="width: 220%; height: 200%;">
-                        </div>
-                        <span class="partner-label"> </span>
-                    </div>
-                    <div class="partner-card">
-                        <div class="partner-icon partner-finance">
-                            <img src="./assets/images/PLC-CI.jpeg" alt="PLC-CI" style="width: 220%; height: 200%;">
-                        </div>
-                        <span class="partner-label"> </span>
-                    </div>
-                    <div class="partner-card">
-                        <div class="partner-icon partner-education">
-                            <img src="./assets/images/Walo Up Dagana.png" alt="Walo Up Dagana" style="width: 220%; height: 200%;">
+                            <img src="./assets/images/ia.jpg" alt="IA" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <!-- Repeat cards for seamless looping effect -->
                     <div class="partner-card">
                         <div class="partner-icon partner-tech">
-                            <img src="./assets/images/Boutique paysanne CI.jpeg" alt="boutique" style="width: 220%; height: 200%;">
+                            <img src="./assets/images/figma.png" alt="figma" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon partner-innovation">
-                            <img src="./assets/images/1.jpg" alt="LA PAIX TRAITEUR" style="width: 220%; height: 200%;">
+                            <img src="./assets/images/N8N.jpg" alt="N8N" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon partner-finance">
-                            <img src="./assets/images/By-So'ba - Lyon.JPG" alt="By-So'ba - Lyon" style="width: 220%; height: 200%;">
+                            <img src="./assets/images/python.png" alt="Python" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon partner-education">
-                            <img src="./assets/images/CICBAD.jpeg" alt="CICBAD" style="width: 220%; height: 200%;">
+                            <img src="./assets/images/react.png" alt="React" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon partner-tech">
-                            <img src="./assets/images/IMG_3700.jpg" alt="SOGIM-C sarl" style="width: 220%; height: 200%;">
+                            <img src="./assets/images/Tally.so-Logo.jpg" alt="Tally" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon partner-">
-                            <img src="./assets/images/LOGO RES'zac-Dakar.png" alt="RES'zac-Dakar" style="width: 220%; height: 200%;">
-                        </div>
-                        <span class="partner-label"> </span>
-                    </div>
-                    <div class="partner-card">
-                        <div class="partner-icon partner-finance">
-                            <img src="./assets/images/PLC-CI.jpeg" alt="PLC-CI" style="width: 220%; height: 200%;">
-                        </div>
-                        <span class="partner-label"> </span>
-                    </div>
-                    <div class="partner-card">
-                        <div class="partner-icon partner-education">
-                            <img src="./assets/images/Walo Up Dagana.png" alt="Walo Up Dagana" style="width: 220%; height: 200%;">
+                            <img src="./assets/images/ia.jpg" alt="IA" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
@@ -1068,8 +1044,8 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                 <div class="contact-hours-card">
                     <h3>Horaires d'ouverture</h3>
                     <ul>
-                        <li><span>Lundi - Vendredi</span><span>8h00 - 18h00</span></li>
-                        <li><span>Samedi</span><span>9h00 - 13h00</span></li>
+                        <li><span>Lundi - Vendredi</span><span>9h00 - 17h00</span></li>
+                        <li><span>Samedi</span><span>10h00 - 13h00</span></li>
                         <li><span>Dimanche</span><span>Fermé</span></li>
                     </ul>
                 </div>

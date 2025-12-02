@@ -1667,6 +1667,13 @@ Trust Section
     line-height: 1.4;
 }
 
+.trust-industry-logo{
+    max-width: 180px;
+    max-height: 100px;
+    object-fit: contain;
+    margin: 0 auto 12px auto;
+}
+
 .partner-logo-large {
     padding: 70px 50px;
     border-radius: var(--radius);
