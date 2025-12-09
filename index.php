@@ -556,7 +556,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                                     <div class="trust-industry-icon trust-icon-eventiel">
                                         <img src="assets/images/CICBAD.jpeg" alt="CICBAB" class="trust-industry-logo">
                                     </div>
-                                    <p class="trust-industry-label">Événementiel</p>
+                                    <p class="trust-industry-label">BTP</p>
                                 </div>
                             </div>
                             <div class="col-6 col-md-3">
@@ -564,15 +564,15 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                                     <div class="trust-industry-icon trust-icon-immobilier">
                                         <img src="assets/images/1.jpg" alt="LA PAIX TRAITEUR" class="trust-industry-logo">
                                     </div>
-                                    <p class="trust-industry-label">Immobilier</p>
+                                    <p class="trust-industry-label">Restauration</p>
                                 </div>
                             </div>
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
-                                    <div class="trust-industry-icon trust-icon-ecommerce">
+                                    <div class="trust-industry-icon">
                                         <img src="assets/images/Boutique paysanne CI.jpeg" alt="Boutique paysanne CI" class="trust-industry-logo">
                                     </div>
-                                    <p class="trust-industry-label">E-commerce</p>
+                                    <p class="trust-industry-label">E-commerce - Agroalimentaire</p>
                                 </div>
                             </div>
                             <div class="col-6 col-md-3">
@@ -580,7 +580,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                                     <div class="trust-industry-icon trust-icon-tech">
                                         <img src="assets/images/By-So'ba - Lyon.JPG" alt="By-So'ba - Lyon" class="trust-industry-logo">
                                     </div>
-                                    <p class="trust-industry-label">Technologie</p>
+                                    <p class="trust-industry-label">Restauration</p>
                                 </div>
                             </div>
                             <!-- Row 2 -->
@@ -589,7 +589,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                                     <div class="trust-industry-icon trust-icon-media">
                                         <img src="assets/images/IMG_3700.jpg" alt="SOGIM-C sarl" class="trust-industry-logo">
                                     </div>
-                                    <p class="trust-industry-label">Médias</p>
+                                    <p class="trust-industry-label">Immobillier - BTP</p>
                                 </div>
                             </div>
                             <div class="col-6 col-md-3">
@@ -597,7 +597,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                                     <div class="trust-industry-icon trust-icon-distribution">
                                         <img src="assets/images/LOGO RES'zac-Dakar.png" alt="RES'zac-Dakar" class="trust-industry-logo">
                                     </div>
-                                    <p class="trust-industry-label">Distribution</p>
+                                    <p class="trust-industry-label">résidence Hôtelière</p>
                                 </div>
                             </div>
                             <div class="col-6 col-md-3">
@@ -605,7 +605,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                                     <div class="trust-industry-icon trust-icon-services">
                                         <img src="assets/images/PLC-CI.jpeg" alt="PLC-CI" class="trust-industry-logo">
                                     </div>
-                                    <p class="trust-industry-label">Services</p>
+                                    <p class="trust-industry-label">Agroalimentaire</p>
                                 </div>
                             </div>
                             <div class="col-6 col-md-3">
@@ -613,7 +613,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                                     <div class="trust-industry-icon trust-icon-publicite">
                                         <img src="assets/images/Walo Up Dagana.png" alt="Walo Up Dagana" class="trust-industry-logo">
                                     </div>
-                                    <p class="trust-industry-label">Publicité</p>
+                                    <p class="trust-industry-label">Événementiel</p>
                                 </div>
                             </div>
                         </div>
@@ -858,75 +858,147 @@ $otherArticles = array_slice($recentArticles, 1, 3);
             <div class="partners-marquee-container">
                 <div class="partners-marquee-track">
                     <div class="partner-card">
-                        <div class="partner-icon partner-tech">
+                        <div class="partner-icon ">
                             <img src="./assets/images/figma.png" alt="figma" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
-                        <div class="partner-icon partner-innovation">
-                            <img src="./assets/images/N8N.jpg" alt="N8N" style="width: 220%; height: 200%;">
+                        <div class="partner-icon">
+                            <img src="./assets/images/2.png" alt="metricool" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
-                        <div class="partner-icon partner-finance">
-                            <img src="./assets/images/python.png" alt="Python" style="width: 220%; height: 200%;">
+                        <div class="partner-icon ">
+                            <img src="./assets/images/12.png" alt="zoom" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
-                        <div class="partner-icon partner-education">
-                            <img src="./assets/images/react.png" alt="React" style="width: 220%; height: 200%;">
-                        </div>
-                        <span class="partner-label"> </span>
-                    </div>
-                    <div class="partner-card">
-                        <div class="partner-icon partner-tech">
+                        <div class="partner-icon">
                             <img src="./assets/images/Tally.so-Logo.jpg" alt="Tally" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
-                        <div class="partner-icon partner-">
-                            <img src="./assets/images/ia.jpg" alt="IA" style="width: 220%; height: 200%;">
+                        <div class="partner-icon">
+                            <img src="./assets/images/18.png" alt="Teams" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon">
+                            <img src="./assets/images/19.png" alt="Meta" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon">
+                            <img src="./assets/images/20.png" alt="Slack" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon">
+                            <img src="./assets/images/21.png" alt="Webhooks" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon">
+                            <img src="./assets/images/22.png" alt="Power Bi " style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon">
+                            <img src="./assets/images/23.png" alt="N8N" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon">
+                            <img src="./assets/images/24.png" alt="Notion" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon">
+                            <img src="./assets/images/25.png" alt="Perplexity" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <!-- Repeat cards for seamless looping effect -->
                     <div class="partner-card">
-                        <div class="partner-icon partner-tech">
+                        <div class="partner-icon">
                             <img src="./assets/images/figma.png" alt="figma" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
-                        <div class="partner-icon partner-innovation">
-                            <img src="./assets/images/N8N.jpg" alt="N8N" style="width: 220%; height: 200%;">
+                        <div class="partner-icon">
+                            <img src="./assets/images/2.png" alt="metricool" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
-                        <div class="partner-icon partner-finance">
-                            <img src="./assets/images/python.png" alt="Python" style="width: 220%; height: 200%;">
+                        <div class="partner-icon ">
+                            <img src="./assets/images/12.png" alt="zoom" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
-                        <div class="partner-icon partner-education">
-                            <img src="./assets/images/react.png" alt="React" style="width: 220%; height: 200%;">
-                        </div>
-                        <span class="partner-label"> </span>
-                    </div>
-                    <div class="partner-card">
-                        <div class="partner-icon partner-tech">
+                        <div class="partner-icon">
                             <img src="./assets/images/Tally.so-Logo.jpg" alt="Tally" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
-                        <div class="partner-icon partner-">
-                            <img src="./assets/images/ia.jpg" alt="IA" style="width: 220%; height: 200%;">
+                        <div class="partner-icon">
+                            <img src="./assets/images/18.png" alt="Teams" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon">
+                            <img src="./assets/images/19.png" alt="Meta" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon">
+                            <img src="./assets/images/20.png" alt="Slack" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon">
+                            <img src="./assets/images/21.png" alt="Webhooks" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon">
+                            <img src="./assets/images/22.png" alt="Power Bi " style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon">
+                            <img src="./assets/images/23.png" alt="N8N" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon">
+                            <img src="./assets/images/24.png" alt="Notion" style="width: 220%; height: 200%;">
+                        </div>
+                        <span class="partner-label"> </span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-icon">
+                            <img src="./assets/images/25.png" alt="Perplexity" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
