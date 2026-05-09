@@ -11,7 +11,7 @@
                 <div class="footer-col footer-solutions">
                     <h5 class="footer-title">Nos Solutions</h5>
                     <ul class="footer-list">
-                        <li>Jeton - Billetterie & Événementiel</li>
+                        <li>Fodium - Billetterie & Événementiel</li>
                         <li>E-mobi - Gestion Immobilière</li>
                         <li>Services d'accompagnement</li>
                     </ul>

@@ -129,7 +129,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                                 <i class="bi bi-ticket-perforated"></i>
                             </div>
                             <div class="flex-grow-1 ms-3">
-                                <h3 class="metier-card-title mb-2">Jeton</h3>
+                                <h3 class="metier-card-title mb-2">Fodium</h3>
                                 <span class="metier-tag">Événementiel</span>
                                 <p class="metier-description mt-3 mb-0">
                                     La plateforme de billetterie et de gestion d'événements qui connecte le digital à la scène africaine.
@@ -166,8 +166,8 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <strong>Public cible:</strong> Promoteurs, associations, agences culturelles, organisateurs privés
                         </p>
                         <div class="text-center mt-4">
-                            <a href="#" class="btn metier-btn metier-btn-jeton">
-                                Découvrir Jeton
+                            <a href="https://fodium.kanzey.co" class="btn metier-btn metier-btn-jeton">
+                                Découvrir Fodium
                                 <i class="bi bi-arrow-right ms-2"></i>
                             </a>
                         </div>
@@ -415,7 +415,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                         <i class="bi bi-stack"></i>
                     </div>
                     <h4 class="architecture-title">Pôles Sectoriels</h4>
-                    <p class="architecture-description">Jeton (Événementiel) et E-mobi (Immobilier)</p>
+                    <p class="architecture-description">Fodium (Événementiel) et E-mobi (Immobilier)</p>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">
