@@ -29,7 +29,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
     <div class="container">
         <div class="row">
             <div class="col-12 text-center hero-content">
-                <h1 class="hero-title">Transformons l'Afrique par le digital</h1>
+                <h1 class="hero-title">Transformons l'Afrique par le digitale</h1>
                 <p class="hero-subtitle">Des solutions digitales sectorielles pensées pour l'Afrique de l'Ouest. Nous accompagnons les entreprises dans leur transformation numérique avec des outils performants et accessibles.</p>
                 <div class="hero-buttons mt-4">
                     <a href="#solutions" class="btn btn-hero-white">Découvrir nos solutions</a>
