@@ -4,7 +4,7 @@
             <div class="footer-main">
                 <div class="footer-col footer-brand">
                     <div class="footer-logo">
-                        <img src="assets/images/Logo Kanzey Co.png" alt="logo" style="width: 55px; height: 55px; object-fit: contain;">
+                        <img src="<?php echo BASE_URL; ?>assets/images/Logo Kanzey Co.png" alt="logo" style="width: 55px; height: 55px; object-fit: contain;">
                     </div>
                     <p class="footer-tagline">Solutions digitales sectorielles pour l'Afrique de l'Ouest</p>
                 </div>
@@ -46,7 +46,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Custom JS -->
-    <script src="assets/js/main.js"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/main.js"></script>
     </body>
 
-    </html>
+    </html>

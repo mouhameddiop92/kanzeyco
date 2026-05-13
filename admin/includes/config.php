@@ -9,8 +9,9 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Inclure la configuration de la base de données
+// Inclure la configuration de la base de données et la config globale
 require_once __DIR__ . '/../../includes/database.php';
+require_once __DIR__ . '/../../includes/config.php';
 
 // Configuration de la base de données (utilise les constantes de database.php)
 // Les constantes sont déjà définies dans includes/database.php

@@ -53,7 +53,7 @@ $relatedArticles = array_slice(array_values($relatedArticles), 0, 3);
             </div>
             <div class="col-lg-5">
                 <div class="ratio ratio-4x3 rounded-4 overflow-hidden shadow">
-                    <img src="<?php echo htmlspecialchars($article['image']); ?>" alt="<?php echo htmlspecialchars($article['title']); ?>" class="w-100 h-100" style="object-fit: cover;">
+                    <img src="<?php echo (strpos($article['image'], 'http') === 0) ? htmlspecialchars($article['image']) : BASE_URL . htmlspecialchars($article['image']); ?>" alt="<?php echo htmlspecialchars($article['title']); ?>" class="w-100 h-100" style="object-fit: cover;">
                 </div>
             </div>
         </div>
@@ -85,7 +85,7 @@ $relatedArticles = array_slice(array_values($relatedArticles), 0, 3);
                 <div class="bg-light rounded-4 p-4">
                     <h3 class="h5 mb-3">Envie d'aller plus loin ?</h3>
                     <p class="mb-4">Nos experts peuvent vous aider à cadrer votre projet en deux semaines : audit express, plan d'action et feuille de route priorisée.</p>
-                    <a href="index.php#contact" class="btn btn-primary">Discuter avec un expert</a>
+                    <a href="<?php echo BASE_URL; ?>index.php#contact" class="btn btn-primary">Discuter avec un expert</a>
                 </div>
 
                 <!-- Section Commentaires -->
@@ -177,11 +177,11 @@ $relatedArticles = array_slice(array_values($relatedArticles), 0, 3);
                         <div class="d-flex mb-3">
                             <div class="flex-grow-1">
                                 <p class="text-muted mb-1 small"><?php echo htmlspecialchars($related['category']); ?> · <?php echo htmlspecialchars($related['read_time']); ?></p>
-                                <a href="article-detail.php?slug=<?php echo urlencode($related['slug']); ?>" class="text-decoration-none fw-semibold"><?php echo htmlspecialchars($related['title']); ?></a>
+                                <a href="<?php echo BASE_URL; ?>article-detail.php?slug=<?php echo urlencode($related['slug']); ?>" class="text-decoration-none fw-semibold"><?php echo htmlspecialchars($related['title']); ?></a>
                             </div>
                         </div>
                     <?php endforeach; ?>
-                    <a href="articles.php" class="btn btn-outline-primary w-100 mt-2">Retour au blog</a>
+                    <a href="<?php echo BASE_URL; ?>articles.php" class="btn btn-outline-primary w-100 mt-2">Retour au blog</a>
                 </div>
             </div>
         </div>
@@ -207,7 +207,7 @@ $relatedArticles = array_slice(array_values($relatedArticles), 0, 3);
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Envoi...';
 
-                fetch('includes/process-comment.php', {
+                fetch('<?php echo BASE_URL; ?>includes/process-comment.php', {
                         method: 'POST',
                         body: formData
                     })

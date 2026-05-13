@@ -115,7 +115,7 @@ if ($pdo) {
                                         <a href="articles.php?action=edit&slug=<?php echo $article['slug']; ?>" class="btn-icon" title="Modifier">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="../article-detail.php?slug=<?php echo $article['slug']; ?>" target="_blank" class="btn-icon" title="Voir">
+                                        <a href="<?php echo BASE_URL; ?>article-detail.php?slug=<?php echo $article['slug']; ?>" target="_blank" class="btn-icon" title="Voir">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                     </td>
@@ -163,7 +163,7 @@ if ($pdo) {
                         <i class="fas fa-cog"></i>
                         <span>Paramètres</span>
                     </a>
-                    <a href="../index.php" target="_blank" class="quick-action-btn">
+                    <a href="<?php echo BASE_URL; ?>index.php" target="_blank" class="quick-action-btn">
                         <i class="fas fa-external-link-alt"></i>
                         <span>Voir le site</span>
                     </a>

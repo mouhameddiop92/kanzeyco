@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/config.php'; ?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -17,16 +18,16 @@
 
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css">
 </head>
 
 <body>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#" id="logoLink">
+            <a class="navbar-brand" href="<?php echo BASE_URL; ?>" id="logoLink">
                 <div class="logo" id="siteLogo">
-                    <img src="assets/images/Logo Kanzey Co.png" alt="logo" style="width: 100px; height: 100px; object-fit: contain;">
+                    <img src="<?php echo BASE_URL; ?>assets/images/Logo Kanzey Co.png" alt="logo" style="width: 100px; height: 100px; object-fit: contain;">
                 </div>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -35,25 +36,25 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav align-items-lg-center me-lg-3">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php#accueil">Accueil</a>
+                        <a class="nav-link" href="<?php echo BASE_URL; ?>index.php#accueil">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php#solutions">Solutions</a>
+                        <a class="nav-link" href="<?php echo BASE_URL; ?>index.php#solutions">Solutions</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php#services">Services</a>
+                        <a class="nav-link" href="<?php echo BASE_URL; ?>index.php#services">Services</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php#actualites">Blog</a>
+                        <a class="nav-link" href="<?php echo BASE_URL; ?>index.php#actualites">Blog</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php#apropos">À propos</a>
+                        <a class="nav-link" href="<?php echo BASE_URL; ?>index.php#apropos">À propos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php#contact">Contact</a>
+                        <a class="nav-link" href="<?php echo BASE_URL; ?>index.php#contact">Contact</a>
                     </li>
                 </ul>
-                <a href="index.php#contact" class="btn btn-primary btn-login">Demander une démo</a>
+                <a href="<?php echo BASE_URL; ?>index.php#contact" class="btn btn-primary btn-login">Demander une démo</a>
             </div>
         </div>
     </nav>

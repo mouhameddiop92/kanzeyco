@@ -36,14 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>admin/assets/css/admin.css">
 </head>
 <body class="login-page">
     <div class="login-container">
         <div class="login-card">
             <div class="login-header">
                 <div class="login-logo">
-                    <img src="../assets/images/Logo Kanzey Co.png" alt="KANZEYCO Logo" class="logo-img">
+                    <img src="<?php echo BASE_URL; ?>assets/images/Logo Kanzey Co.png" alt="KANZEYCO Logo" class="logo-img">
                 </div>
                 <h2 class="login-title">Espace Administrateur</h2>
                 <p class="login-subtitle">Connectez-vous pour gérer le site</p>
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
             
             <div class="login-footer">
-                <a href="../index.php" class="back-to-site">
+                <a href="<?php echo BASE_URL; ?>index.php" class="back-to-site">
                     <i class="fas fa-arrow-left me-2"></i>Retour au site
                 </a>
             </div>

@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </td>
                             <td>
                                 <div class="action-buttons">
-                                    <a href="../article-detail.php?slug=<?php echo $article['slug']; ?>" target="_blank" class="btn-icon" title="Voir">
+                                    <a href="<?php echo BASE_URL; ?>article-detail.php?slug=<?php echo $article['slug']; ?>" target="_blank" class="btn-icon" title="Voir">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                     <a href="?action=edit&slug=<?php echo $article['slug']; ?>" class="btn-icon" title="Modifier">

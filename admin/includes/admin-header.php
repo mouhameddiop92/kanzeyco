@@ -45,14 +45,14 @@ try {
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>admin/assets/css/admin.css">
 </head>
 
 <body class="admin-body">
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <img src="../assets/images/Logo Kanzey Co.png" alt="KANZEYCO Logo" class="sidebar-logo">
+            <img src="<?php echo BASE_URL; ?>assets/images/Logo Kanzey Co.png" alt="KANZEYCO Logo" class="sidebar-logo">
             <h3 class="sidebar-title">KANZEYCO</h3>
             <p class="sidebar-subtitle">Administration</p>
         </div>
@@ -96,7 +96,7 @@ try {
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="../index.php" class="nav-link" target="_blank">
+                    <a href="<?php echo BASE_URL; ?>index.php" class="nav-link" target="_blank">
                         <i class="fas fa-external-link-alt"></i>
                         <span>Voir le site</span>
                     </a>

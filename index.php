@@ -51,7 +51,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
         <div class="row align-items-center mb-5">
             <!-- Image à gauche -->
             <div class="col-md-6 mb-4 mb-md-0">
-                <img src="assets/images/meeting.jpeg" alt="Notre équipe" class="img-fluid rounded-4 vision-mission-image">
+                <img src="<?php echo BASE_URL; ?>assets/images/meeting.jpeg" alt="Notre équipe" class="img-fluid rounded-4 vision-mission-image">
             </div>
 
             <!-- Vision & Mission à droite -->
@@ -249,7 +249,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
         <div class="row g-4 mb-5">
             <div class="col-lg-6 col-md-12">
                 <div class="transversal-feature-card transversal-card-analytics">
-                    <img src="assets/images/Reporting.webp" alt="Data Analytics" class="transversal-card-image">
+                    <img src="<?php echo BASE_URL; ?>assets/images/Reporting.webp" alt="Data Analytics" class="transversal-card-image">
                     <div class="transversal-card-overlay">
                         <h3 class="transversal-card-title">Data Analytics & Reporting</h3>
                         <p class="transversal-card-subtitle">Visualisez vos performances en temps réel.</p>
@@ -258,7 +258,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
             </div>
             <div class="col-lg-6 col-md-12">
                 <div class="transversal-feature-card transversal-card-analytics">
-                    <img src="assets/images/marqueting.avif" alt="Data Analytics" class="transversal-card-image">
+                    <img src="<?php echo BASE_URL; ?>assets/images/marqueting.avif" alt="Data Analytics" class="transversal-card-image">
                     <div class="transversal-card-overlay">
                         <h3 class="transversal-card-title">Marketing Digital 360°</h3>
                         <p class="transversal-card-subtitle">Maximisez votre présence en ligne.</p>
@@ -371,7 +371,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
         <div class="row g-0 mb-5">
             <div class="col-lg-6">
                 <div class="ai-cta-image h-100">
-                    <img src="assets/images/ia.jpg" alt="Intelligence Artificielle" class="img-fluid h-100 w-100" style="object-fit:cover; object-position:center; height:100%; width:100%;">
+                    <img src="<?php echo BASE_URL; ?>assets/images/ia.jpg" alt="Intelligence Artificielle" class="img-fluid h-100 w-100" style="object-fit:cover; object-position:center; height:100%; width:100%;">
                 </div>
             </div>
             <div class="col-lg-6">
@@ -554,7 +554,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon trust-icon-eventiel">
-                                        <img src="assets/images/CICBAD.jpeg" alt="CICBAB" class="trust-industry-logo">
+                                        <img src="<?php echo BASE_URL; ?>assets/images/CICBAD.jpeg" alt="CICBAB" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">BTP</p>
                                 </div>
@@ -562,7 +562,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon trust-icon-immobilier">
-                                        <img src="assets/images/1.jpg" alt="LA PAIX TRAITEUR" class="trust-industry-logo">
+                                        <img src="<?php echo BASE_URL; ?>assets/images/1.jpg" alt="LA PAIX TRAITEUR" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">Restauration</p>
                                 </div>
@@ -570,7 +570,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon">
-                                        <img src="assets/images/Boutique paysanne CI.jpeg" alt="Boutique paysanne CI" class="trust-industry-logo">
+                                        <img src="<?php echo BASE_URL; ?>assets/images/Boutique paysanne CI.jpeg" alt="Boutique paysanne CI" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">E-commerce - Agroalimentaire</p>
                                 </div>
@@ -578,7 +578,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon trust-icon-tech">
-                                        <img src="assets/images/By-So'ba - Lyon.JPG" alt="By-So'ba - Lyon" class="trust-industry-logo">
+                                        <img src="<?php echo BASE_URL; ?>assets/images/By-So'ba - Lyon.JPG" alt="By-So'ba - Lyon" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">Restauration</p>
                                 </div>
@@ -587,7 +587,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon trust-icon-media">
-                                        <img src="assets/images/IMG_3700.jpg" alt="SOGIM-C sarl" class="trust-industry-logo">
+                                        <img src="<?php echo BASE_URL; ?>assets/images/IMG_3700.jpg" alt="SOGIM-C sarl" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">Immobillier - BTP</p>
                                 </div>
@@ -595,7 +595,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon trust-icon-distribution">
-                                        <img src="assets/images/LOGO RES'zac-Dakar.png" alt="RES'zac-Dakar" class="trust-industry-logo">
+                                        <img src="<?php echo BASE_URL; ?>assets/images/LOGO RES'zac-Dakar.png" alt="RES'zac-Dakar" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">résidence Hôtelière</p>
                                 </div>
@@ -603,7 +603,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon trust-icon-services">
-                                        <img src="assets/images/PLC-CI.jpeg" alt="PLC-CI" class="trust-industry-logo">
+                                        <img src="<?php echo BASE_URL; ?>assets/images/PLC-CI.jpeg" alt="PLC-CI" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">Agroalimentaire</p>
                                 </div>
@@ -611,7 +611,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon trust-icon-publicite">
-                                        <img src="assets/images/Walo Up Dagana.png" alt="Walo Up Dagana" class="trust-industry-logo">
+                                        <img src="<?php echo BASE_URL; ?>assets/images/Walo Up Dagana.png" alt="Walo Up Dagana" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">Événementiel</p>
                                 </div>
@@ -711,7 +711,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                     <h3 class="news-feature-title"><?php echo htmlspecialchars($featuredArticle['title']); ?></h3>
                     <p class="news-feature-excerpt"><?php echo htmlspecialchars($featuredArticle['excerpt']); ?></p>
                     <div class="news-feature-actions">
-                        <a href="article-detail.php?slug=<?php echo urlencode($featuredArticle['slug']); ?>" class="btn-news-primary">Lire l'article</a>
+                        <a href="<?php echo BASE_URL; ?>article-detail.php?slug=<?php echo urlencode($featuredArticle['slug']); ?>" class="btn-news-primary">Lire l'article</a>
                         <button class="btn-news-icon" aria-label="Enregistrer l'article">
                             <i class="bi bi-bookmark"></i>
                         </button>
@@ -733,13 +733,13 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                         </div>
                         <h4 class="news-card-title"><?php echo htmlspecialchars($article['title']); ?></h4>
                         <p class="news-card-excerpt"><?php echo htmlspecialchars($article['excerpt']); ?></p>
-                        <a href="article-detail.php?slug=<?php echo urlencode($article['slug']); ?>" class="news-card-link">Lire plus</a>
+                        <a href="<?php echo BASE_URL; ?>article-detail.php?slug=<?php echo urlencode($article['slug']); ?>" class="news-card-link">Lire plus</a>
                     </div>
                 </article>
             <?php endforeach; ?>
         </div>
         <div class="news-footer">
-            <a href="articles.php" class="btn btn-outline-primary mt-4">Voir toutes les actualités</a>
+            <a href="<?php echo BASE_URL; ?>articles.php" class="btn btn-outline-primary mt-4">Voir toutes les actualités</a>
         </div>
     </div>
 </section>
@@ -859,146 +859,146 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                 <div class="partners-marquee-track">
                     <div class="partner-card">
                         <div class="partner-icon ">
-                            <img src="./assets/images/figma.png" alt="figma" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/figma.png" alt="figma" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/2.png" alt="metricool" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/2.png" alt="metricool" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon ">
-                            <img src="./assets/images/12.png" alt="zoom" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/12.png" alt="zoom" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/Tally.so-Logo.jpg" alt="Tally" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/Tally.so-Logo.jpg" alt="Tally" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/18.png" alt="Teams" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/18.png" alt="Teams" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/19.png" alt="Meta" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/19.png" alt="Meta" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/20.png" alt="Slack" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/20.png" alt="Slack" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/21.png" alt="Webhooks" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/21.png" alt="Webhooks" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/22.png" alt="Power Bi " style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/22.png" alt="Power Bi " style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/23.png" alt="N8N" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/23.png" alt="N8N" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/24.png" alt="Notion" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/24.png" alt="Notion" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/25.png" alt="Perplexity" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/25.png" alt="Perplexity" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <!-- Repeat cards for seamless looping effect -->
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/figma.png" alt="figma" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/figma.png" alt="figma" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/2.png" alt="metricool" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/2.png" alt="metricool" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon ">
-                            <img src="./assets/images/12.png" alt="zoom" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/12.png" alt="zoom" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/Tally.so-Logo.jpg" alt="Tally" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/Tally.so-Logo.jpg" alt="Tally" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/18.png" alt="Teams" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/18.png" alt="Teams" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/19.png" alt="Meta" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/19.png" alt="Meta" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/20.png" alt="Slack" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/20.png" alt="Slack" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/21.png" alt="Webhooks" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/21.png" alt="Webhooks" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/22.png" alt="Power Bi " style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/22.png" alt="Power Bi " style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/23.png" alt="N8N" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/23.png" alt="N8N" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/24.png" alt="Notion" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/24.png" alt="Notion" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
                     <div class="partner-card">
                         <div class="partner-icon">
-                            <img src="./assets/images/25.png" alt="Perplexity" style="width: 220%; height: 200%;">
+                            <img src="<?php echo BASE_URL; ?>assets/images/25.png" alt="Perplexity" style="width: 220%; height: 200%;">
                         </div>
                         <span class="partner-label"> </span>
                     </div>
@@ -1160,7 +1160,7 @@ include 'includes/footer.php';
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Envoi...';
 
-                fetch('includes/process-newsletter.php', {
+                fetch('<?php echo BASE_URL; ?>includes/process-newsletter.php', {
                         method: 'POST',
                         body: formData
                     })
@@ -1201,7 +1201,7 @@ include 'includes/footer.php';
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Envoi...';
 
-                fetch('includes/process-contact.php', {
+                fetch('<?php echo BASE_URL; ?>includes/process-contact.php', {
                         method: 'POST',
                         body: formData
                     })

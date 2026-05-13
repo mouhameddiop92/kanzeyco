@@ -17,7 +17,7 @@ $featuredArticle = $articles[0] ?? null;
         <?php if ($featuredArticle): ?>
             <div class="news-feature mb-5">
                 <div class="news-feature-image">
-                    <img src="<?php echo htmlspecialchars($featuredArticle['image']); ?>" alt="<?php echo htmlspecialchars($featuredArticle['title']); ?>">
+                    <img src="<?php echo (strpos($featuredArticle['image'], 'http') === 0) ? htmlspecialchars($featuredArticle['image']) : BASE_URL . htmlspecialchars($featuredArticle['image']); ?>" alt="<?php echo htmlspecialchars($featuredArticle['title']); ?>">
                     <span class="news-tag"><?php echo htmlspecialchars($featuredArticle['category']); ?></span>
                 </div>
                 <div class="news-feature-content">
@@ -28,7 +28,7 @@ $featuredArticle = $articles[0] ?? null;
                     <h3 class="news-feature-title"><?php echo htmlspecialchars($featuredArticle['title']); ?></h3>
                     <p class="news-feature-excerpt"><?php echo htmlspecialchars($featuredArticle['excerpt']); ?></p>
                     <div class="news-feature-actions">
-                        <a href="article-detail.php?slug=<?php echo urlencode($featuredArticle['slug']); ?>" class="btn-news-primary">Lire l'article</a>
+                        <a href="<?php echo BASE_URL; ?>article-detail.php?slug=<?php echo urlencode($featuredArticle['slug']); ?>" class="btn-news-primary">Lire l'article</a>
                         <button class="btn-news-icon" aria-label="Enregistrer l'article">
                             <i class="bi bi-bookmark"></i>
                         </button>
@@ -51,7 +51,7 @@ $featuredArticle = $articles[0] ?? null;
             <?php foreach ($articles as $article): ?>
                 <article class="news-card">
                     <div class="news-card-image">
-                        <img src="<?php echo htmlspecialchars($article['image']); ?>" alt="<?php echo htmlspecialchars($article['title']); ?>">
+                        <img src="<?php echo (strpos($article['image'], 'http') === 0) ? htmlspecialchars($article['image']) : BASE_URL . htmlspecialchars($article['image']); ?>" alt="<?php echo htmlspecialchars($article['title']); ?>">
                         <span class="news-tag"><?php echo htmlspecialchars($article['category']); ?></span>
                     </div>
                     <div class="news-card-body">
@@ -61,7 +61,7 @@ $featuredArticle = $articles[0] ?? null;
                         </div>
                         <h4 class="news-card-title"><?php echo htmlspecialchars($article['title']); ?></h4>
                         <p class="news-card-excerpt"><?php echo htmlspecialchars($article['excerpt']); ?></p>
-                        <a href="article-detail.php?slug=<?php echo urlencode($article['slug']); ?>" class="news-card-link">Lire plus</a>
+                        <a href="<?php echo BASE_URL; ?>article-detail.php?slug=<?php echo urlencode($article['slug']); ?>" class="news-card-link">Lire plus</a>
                     </div>
                 </article>
             <?php endforeach; ?>

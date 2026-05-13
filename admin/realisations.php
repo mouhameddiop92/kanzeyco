@@ -56,7 +56,7 @@ $totalPages = ($perPage > 0) ? ceil($total / $perPage) : 1;
                             <tr id="real-row-<?php echo $it['realisation_id']; ?>">
                                 <td><?php echo htmlspecialchars($it['title']); ?></td>
                                 <td><?php echo nl2br(htmlspecialchars(substr($it['description'], 0, 80))); ?><?php echo strlen($it['description']) > 80 ? '…' : ''; ?></td>
-                                <td><?php if (!empty($it['image'])): ?><img src="/<?php echo htmlspecialchars($it['image']); ?>" alt="" style="height:48px"><?php endif; ?></td>
+                                <td><?php if (!empty($it['image'])): ?><img src="<?php echo BASE_URL . htmlspecialchars($it['image']); ?>" alt="" style="height:48px"><?php endif; ?></td>
                                 <td><?php echo htmlspecialchars($it['status']); ?></td>
                                 <td><?php echo htmlspecialchars($it['date_created'] ?? ''); ?></td>
                                 <td>
@@ -140,7 +140,7 @@ $totalPages = ($perPage > 0) ? ceil($total / $perPage) : 1;
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const api = 'includes/realisations-action.php';
+        const api = '<?php echo BASE_URL; ?>admin/includes/realisations-action.php';
 
         function postForm(form) {
             return fetch(api, {
@@ -179,7 +179,7 @@ $totalPages = ($perPage > 0) ? ceil($total / $perPage) : 1;
                     document.getElementById('editDescription').value = d.description;
                     document.getElementById('editContent').value = d.content;
                     document.getElementById('editStatus').value = d.status;
-                    document.getElementById('currentImage').innerHTML = d.image ? `<img src="/${d.image}" style="height:80px">` : '—';
+                    document.getElementById('currentImage').innerHTML = d.image ? `<img src="<?php echo BASE_URL; ?>${d.image}" style="height:80px">` : '—';
                     var m = new bootstrap.Modal(document.getElementById('editModal'));
                     m.show();
                 } else alert(j.message || 'Erreur');
