@@ -698,9 +698,15 @@ $otherArticles = array_slice($recentArticles, 1, 3);
             <p class="news-subtitle">Cas clients, tendances sectorielles, retours d'expérience et conseils actionnables.</p>
         </div>
         <?php if ($featuredArticle): ?>
+            <?php 
+                $featuredImg = $featuredArticle['image'];
+                if (!preg_match('/^https?:\/\//', $featuredImg)) {
+                    $featuredImg = BASE_URL . $featuredImg;
+                }
+            ?>
             <div class="news-feature mb-5">
                 <div class="news-feature-image">
-                    <img src="<?php echo htmlspecialchars($featuredArticle['image']); ?>" alt="<?php echo htmlspecialchars($featuredArticle['title']); ?>">
+                    <img src="<?php echo htmlspecialchars($featuredImg); ?>" alt="<?php echo htmlspecialchars($featuredArticle['title']); ?>">
                     <span class="news-tag"><?php echo htmlspecialchars($featuredArticle['category']); ?></span>
                 </div>
                 <div class="news-feature-content">
@@ -721,9 +727,15 @@ $otherArticles = array_slice($recentArticles, 1, 3);
         <?php endif; ?>
         <div class="news-grid">
             <?php foreach ($otherArticles as $article): ?>
+                <?php 
+                    $articleImg = $article['image'];
+                    if (!preg_match('/^https?:\/\//', $articleImg)) {
+                        $articleImg = BASE_URL . $articleImg;
+                    }
+                ?>
                 <article class="news-card">
                     <div class="news-card-image">
-                        <img src="<?php echo htmlspecialchars($article['image']); ?>" alt="<?php echo htmlspecialchars($article['title']); ?>">
+                        <img src="<?php echo htmlspecialchars($articleImg); ?>" alt="<?php echo htmlspecialchars($article['title']); ?>">
                         <span class="news-tag"><?php echo htmlspecialchars($article['category']); ?></span>
                     </div>
                     <div class="news-card-body">
