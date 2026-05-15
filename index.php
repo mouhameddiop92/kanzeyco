@@ -570,7 +570,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon">
-                                        <img src="<?php echo BASE_URL; ?>assets/images/Boutique paysanne CI.jpeg" alt="Boutique paysanne CI" class="trust-industry-logo">
+                                        <img src="<?php echo BASE_URL; ?>assets/images/Boutique%20paysanne%20CI.jpeg" alt="Boutique paysanne CI" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">E-commerce - Agroalimentaire</p>
                                 </div>
@@ -578,7 +578,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                             <div class="col-6 col-md-3">
                                 <div class="trust-industry-card">
                                     <div class="trust-industry-icon trust-icon-tech">
-                                        <img src="<?php echo BASE_URL; ?>assets/images/By-So'ba - Lyon.JPG" alt="By-So'ba - Lyon" class="trust-industry-logo">
+                                        <img src="<?php echo BASE_URL; ?>assets/images/By-So'ba%20-%20Lyon.JPG" alt="By-So'ba - Lyon" class="trust-industry-logo">
                                     </div>
                                     <p class="trust-industry-label">Restauration</p>
                                 </div>

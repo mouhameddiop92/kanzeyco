@@ -27,7 +27,7 @@
         <div class="container">
             <a class="navbar-brand" href="<?php echo BASE_URL; ?>" id="logoLink">
                 <div class="logo" id="siteLogo">
-                    <img src="<?php echo BASE_URL; ?>assets/images/Logo Kanzey Co.png" alt="logo" style="width: 100px; height: 100px; object-fit: contain;">
+                    <img src="<?php echo BASE_URL; ?>assets/images/Logo%20Kanzey%20Co.png" alt="logo" style="width: 100px; height: 100px; object-fit: contain;">
                 </div>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">

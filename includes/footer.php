@@ -4,7 +4,7 @@
             <div class="footer-main">
                 <div class="footer-col footer-brand">
                     <div class="footer-logo">
-                        <img src="<?php echo BASE_URL; ?>assets/images/Logo Kanzey Co.png" alt="logo" style="width: 55px; height: 55px; object-fit: contain;">
+                        <img src="<?php echo BASE_URL; ?>assets/images/Logo%20Kanzey%20Co.png" alt="logo" style="width: 55px; height: 55px; object-fit: contain;">
                     </div>
                     <p class="footer-tagline">Solutions digitales sectorielles pour l'Afrique de l'Ouest</p>
                 </div>
