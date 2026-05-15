@@ -17,21 +17,15 @@ if (!defined('BASE_URL')) {
     $host = $_SERVER['HTTP_HOST'];
     
     // Détection du chemin du projet
-    // On utilise SCRIPT_NAME pour obtenir le chemin du script actuel
     $scriptName = $_SERVER['SCRIPT_NAME'];
     $scriptDir = str_replace('\\', '/', dirname($scriptName));
     
-    // Nettoyage du chemin pour obtenir la racine du projet
-    // Si on est dans un sous-dossier connu (includes, admin, assets), on remonte
-    $pathParts = explode('/', trim($scriptDir, '/'));
-    $lastPart = end($pathParts);
+    // Si on est dans un sous-dossier connu, on remonte vers la racine
+    $projectPath = preg_replace('/\/(includes|admin|assets)$/', '', rtrim($scriptDir, '/'));
     
-    if (in_array($lastPart, ['includes', 'admin', 'assets'])) {
-        array_pop($pathParts);
-    }
-    
-    $projectPath = !empty($pathParts) ? '/' . implode('/', $pathParts) : '';
+    // Assurer que le chemin commence et finit par un slash, ou est juste '/'
     $projectPath = rtrim($projectPath, '/') . '/';
+    if ($projectPath === '//') $projectPath = '/';
     
     // Définition de la constante BASE_URL
     // VOUS POUVEZ FORCER L'URL ICI SI LA DÉTECTION AUTOMATIQUE ÉCHOUE
