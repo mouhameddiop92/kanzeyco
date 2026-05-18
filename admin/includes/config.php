@@ -36,6 +36,11 @@ function adminLogin($username, $password)
 {
     $pdo = getDBConnection();
 
+    if ($pdo === null) {
+        error_log("Erreur de connexion BDD dans adminLogin().");
+        return false;
+    }
+
     try {
         // Essayer d'abord par username
         $sql = "SELECT user_id, username, email, password, role, status 
