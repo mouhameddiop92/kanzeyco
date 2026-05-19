@@ -7,25 +7,60 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleSidebarBtn = document.getElementById('toggleSidebar');
     const sidebar = document.getElementById('sidebar');
     
+    // Créer un overlay pour fermer la sidebar sur mobile
+    const overlay = document.createElement('div');
+    overlay.id = 'sidebarOverlay';
+    overlay.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;';
+    document.body.appendChild(overlay);
+
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
+
+    function openMobileSidebar() {
+        sidebar.classList.add('show');
+        overlay.style.display = 'block';
+    }
+
+    function closeMobileSidebar() {
+        sidebar.classList.remove('show');
+        overlay.style.display = 'none';
+    }
+    
     if (toggleSidebarBtn && sidebar) {
         toggleSidebarBtn.addEventListener('click', function() {
-            sidebar.classList.toggle('collapsed');
+            if (isMobile()) {
+                // Sur mobile : ouvrir/fermer le panneau latéral
+                if (sidebar.classList.contains('show')) {
+                    closeMobileSidebar();
+                } else {
+                    openMobileSidebar();
+                }
+            } else {
+                // Sur desktop : réduire/étendre la sidebar
+                sidebar.classList.toggle('collapsed');
+            }
         });
     }
-    
-    // Gestion responsive
-    if (window.innerWidth <= 768) {
-        if (sidebar) {
-            sidebar.classList.remove('collapsed');
-        }
-    }
-    
-    // Toggle sidebar sur mobile
-    window.addEventListener('resize', function() {
-        if (window.innerWidth <= 768) {
-            if (sidebar) {
-                sidebar.classList.remove('collapsed');
+
+    // Fermer la sidebar en cliquant sur l'overlay
+    overlay.addEventListener('click', closeMobileSidebar);
+
+    // Fermer la sidebar en cliquant sur un lien de navigation sur mobile
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (isMobile()) {
+                closeMobileSidebar();
             }
+        });
+    });
+    
+    // Réinitialiser l'état lors du redimensionnement
+    window.addEventListener('resize', function() {
+        if (!isMobile()) {
+            closeMobileSidebar();
+            overlay.style.display = 'none';
         }
     });
 });

@@ -30,7 +30,7 @@ if ($pdo) {
 
 <!-- Statistiques -->
 <div class="row mb-4">
-    <div class="col-md-3 mb-3">
+    <div class="col-6 col-md-3 mb-3">
         <div class="stat-card">
             <div class="stat-icon stat-icon-primary">
                 <i class="fas fa-newspaper"></i>
@@ -42,7 +42,7 @@ if ($pdo) {
         </div>
     </div>
 
-    <div class="col-md-3 mb-3">
+    <div class="col-6 col-md-3 mb-3">
         <div class="stat-card">
             <div class="stat-icon stat-icon-success">
                 <i class="fas fa-eye"></i>
@@ -54,7 +54,7 @@ if ($pdo) {
         </div>
     </div>
 
-    <div class="col-md-3 mb-3">
+    <div class="col-6 col-md-3 mb-3">
         <div class="stat-card">
             <div class="stat-icon stat-icon-info">
                 <i class="fas fa-users"></i>
@@ -66,7 +66,7 @@ if ($pdo) {
         </div>
     </div>
 
-    <div class="col-md-3 mb-3">
+    <div class="col-6 col-md-3 mb-3">
         <div class="stat-card">
             <div class="stat-icon stat-icon-warning">
                 <i class="fas fa-comments"></i>

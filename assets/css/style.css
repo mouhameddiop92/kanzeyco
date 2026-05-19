@@ -2037,6 +2037,17 @@ Trust Section
     .news-feature-title {
         font-size: 1.8rem;
     }
+
+    .about-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .about-hero-image {
+        min-width: 0;
+        min-height: 0;
+        width: 100%;
+        height: 360px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -2060,8 +2071,8 @@ Trust Section
         font-size: 2.2rem;
     }
 
-    .about-hero {
-        grid-template-columns: 1fr;
+    .about-hero-image {
+        height: 300px;
     }
 
     .about-story {
@@ -2094,6 +2105,10 @@ Trust Section
 
     .about-story {
         padding: 28px 24px;
+    }
+
+    .about-hero-image {
+        height: 240px;
     }
 
     .section-badge {
@@ -2239,7 +2254,7 @@ CTA Section
     box-shadow: 0 16px 48px 0 rgba(85, 103, 156, 0.25);
     opacity: 0;
     transform: translateY(40px);
-    min-width: 500px;
+    min-width: 0;
     min-height: 440px;
     width: 100%;
     height: 100%;
@@ -3403,3 +3418,390 @@ Footer
         margin-top: 30px;
     }
 }
+
+/* ============================================
+   MOBILE RESPONSIVE GLOBAL FIXES (≤ 768px)
+   ============================================ */
+
+/* --- Fix principal : s'assurer que les éléments animés deviennent visibles ---
+   Filet de sécurité CSS : si l'animation JS ne se déclenche pas,
+   les sections s'affichent après un délai maximum de 1s */
+@media (max-width: 768px) {
+
+    /* Réduire les délais d'animation sur mobile */
+    .metier-card,
+    .metier-section-title-animate,
+    .metier-section-subtitle-animate,
+    .transversal-feature-card,
+    .transversal-service-card,
+    .ai-cta-image,
+    .ai-cta-content,
+    .architecture-card,
+    .value-card,
+    .impact-card-new,
+    .trust-industry-card,
+    .testimonial-card,
+    .news-card,
+    .about-header,
+    .about-story,
+    .about-hero-image,
+    .why-us-header,
+    .why-us-card,
+    .team-header,
+    .team-chip,
+    .partners-header,
+    .partner-card,
+    .contact-header-animate,
+    .contact-form-card,
+    .contact-details {
+        animation-delay: 0s !important;
+        animation-duration: 0.3s !important;
+    }
+
+    /* Navbar */
+    .navbar-brand img {
+        height: 45px;
+    }
+
+    .navbar-toggler {
+        padding: 4px 8px;
+        font-size: 1.1rem;
+    }
+
+    /* Hero Section */
+    .hero-title {
+        font-size: 1.8rem;
+        line-height: 1.25;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 24px;
+    }
+
+    .btn-hero-white {
+        display: block;
+        width: 100%;
+        margin: 8px 0;
+        text-align: center;
+        padding: 12px 20px;
+    }
+
+    .hero-content {
+        padding: 60px 16px 80px;
+    }
+
+    /* Vision/Mission */
+    #vision-mission .vision-mission-layout,
+    #vision-mission .row {
+        gap: 16px;
+    }
+
+    /* Solutions Métiers */
+    .metier-card-header {
+        padding: 24px 20px;
+    }
+
+    .metier-card-body {
+        padding: 24px 20px;
+    }
+
+    .metier-card-title {
+        font-size: 1.5rem;
+    }
+
+    .metier-description {
+        font-size: 0.95rem;
+    }
+
+    /* Solutions transversales */
+    .transversal-feature-card {
+        min-height: 280px;
+    }
+
+    .transversal-card-overlay {
+        padding: 24px 16px;
+    }
+
+    .transversal-service-card {
+        padding: 24px 20px;
+    }
+
+    /* Section IA CTA */
+    .ai-cta-image {
+        min-height: 220px;
+    }
+
+    .ai-cta-content {
+        padding: 32px 20px;
+    }
+
+    .ai-cta-title {
+        font-size: 1.5rem;
+    }
+
+    /* Architecture */
+    .architecture-card {
+        padding: 28px 20px;
+    }
+
+    /* Valeurs */
+    .value-card {
+        padding: 28px 20px;
+    }
+
+    /* Impact */
+    .impact-card-new {
+        padding: 28px 20px;
+    }
+
+    .impact-number-new {
+        font-size: 2.4rem;
+    }
+
+    /* Ils nous ont fait confiance */
+    .trust-container-wrapper {
+        padding: 24px 12px;
+    }
+
+    .trust-cards-container {
+        padding: 20px 12px;
+    }
+
+    .trust-industry-card {
+        min-height: 100px;
+        padding: 12px;
+    }
+
+    .trust-industry-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .trust-industry-label {
+        font-size: 0.78rem;
+    }
+
+    /* Témoignages */
+    .testimonial-card {
+        padding: 20px;
+    }
+
+    .testimonial-text {
+        font-size: 0.95rem;
+    }
+
+    /* Actualités */
+    .news-feature {
+        padding: 20px;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .news-feature-title {
+        font-size: 1.4rem;
+    }
+
+    .news-feature-image {
+        min-height: 200px;
+    }
+
+    .news-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* CTA */
+    .cta-section {
+        padding: 60px 16px;
+    }
+
+    .cta-title {
+        font-size: 1.8rem;
+    }
+
+    .cta-subtitle {
+        font-size: 1rem;
+    }
+
+    .btn-cta-white {
+        display: block;
+        width: 100%;
+        margin: 8px 0;
+        text-align: center;
+    }
+
+    .cta-newsletter-form {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .cta-newsletter-form input {
+        max-width: 100% !important;
+        width: 100%;
+    }
+
+    /* À propos */
+    .about-title {
+        font-size: 1.8rem;
+    }
+
+    .about-hero {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .about-hero-image {
+        height: 240px;
+        min-width: 0;
+        min-height: 0;
+    }
+
+    .about-story {
+        padding: 24px 20px;
+    }
+
+    .about-story h3 {
+        font-size: 1.3rem;
+    }
+
+    .about-story p {
+        font-size: 0.95rem;
+    }
+
+    /* Pourquoi nous choisir */
+    .why-us-title {
+        font-size: 1.8rem;
+    }
+
+    .why-us-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .why-us-card {
+        padding: 24px 20px;
+    }
+
+    /* Équipe */
+    .team-title {
+        font-size: 1.8rem;
+    }
+
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .team-chip {
+        padding: 20px;
+    }
+
+    .team-chip-icon {
+        width: 72px;
+        height: 72px;
+        font-size: 1.4rem;
+    }
+
+    /* Partenaires / Outils */
+    .partners-title {
+        font-size: 1.8rem;
+    }
+
+    /* Contact */
+    .contact-title {
+        font-size: 1.8rem;
+    }
+
+    .contact-content {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .contact-form-card {
+        padding: 28px 20px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-details {
+        gap: 16px;
+    }
+
+    /* Footer */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+}
+
+/* ============================================
+   TRÈS PETITS MOBILES (≤ 390px)
+   ============================================ */
+@media (max-width: 390px) {
+    .hero-title {
+        font-size: 1.5rem;
+    }
+
+    .section-title,
+    .about-title,
+    .why-us-title,
+    .team-title,
+    .partners-title,
+    .contact-title,
+    .news-title {
+        font-size: 1.4rem;
+    }
+
+    .metier-card-title {
+        font-size: 1.3rem;
+    }
+
+    .trust-industry-card {
+        min-height: 85px;
+        padding: 10px;
+    }
+
+    .impact-number-new {
+        font-size: 2rem;
+    }
+
+    .cta-title {
+        font-size: 1.5rem;
+    }
+}
+
+/* ============================================
+   FALLBACK : prefers-reduced-motion
+   Certains navigateurs mobiles désactivent les animations.
+   On s'assure que les éléments restent visibles dans ce cas.
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    .metier-card,
+    .metier-section-title-animate,
+    .metier-section-subtitle-animate,
+    .transversal-feature-card,
+    .transversal-service-card,
+    .ai-cta-image,
+    .ai-cta-content,
+    .architecture-card,
+    .value-card,
+    .impact-card-new,
+    .trust-industry-card,
+    .testimonial-card,
+    .about-header,
+    .about-story,
+    .about-hero-image,
+    .why-us-header,
+    .why-us-card,
+    .team-header,
+    .team-chip,
+    .partners-header,
+    .partner-card,
+    .contact-form-card,
+    .contact-details {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+        transition: none !important;
+    }
+}

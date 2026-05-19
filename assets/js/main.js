@@ -109,17 +109,18 @@ document.querySelectorAll('.impact-number-new').forEach(number => {
 // Animation des sections au scroll
 // ============================================
 function initScrollAnimations() {
+    // Sur mobile le threshold doit être plus bas pour éviter que les sections
+    // restent invisibles si l'utilisateur scrolle rapidement
+    const isMobile = window.innerWidth <= 768;
     const sectionObserverOptions = {
-        threshold: 0.15,
-        rootMargin: '0px 0px -50px 0px'
+        threshold: isMobile ? 0.02 : 0.15,
+        rootMargin: isMobile ? '0px 0px 0px 0px' : '0px 0px -50px 0px'
     };
 
     const sectionObserver = new IntersectionObserver(function (entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Ajouter la classe is-visible pour déclencher les animations
                 entry.target.classList.add('is-visible');
-                // Ne plus observer cette section une fois l'animation déclenchée
                 sectionObserver.unobserve(entry.target);
             }
         });
@@ -135,6 +136,14 @@ function initScrollAnimations() {
     sectionsToAnimate.forEach(section => {
         if (section) {
             sectionObserver.observe(section);
+
+            // Filet de sécurité : si la section est déjà visible au chargement
+            // (ex: première section de la page), déclencher immédiatement
+            const rect = section.getBoundingClientRect();
+            if (rect.top < window.innerHeight) {
+                section.classList.add('is-visible');
+                sectionObserver.unobserve(section);
+            }
         }
     });
 }
@@ -143,7 +152,6 @@ function initScrollAnimations() {
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initScrollAnimations);
 } else {
-    // DOM déjà chargé
     initScrollAnimations();
 }
 

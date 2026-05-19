@@ -36,7 +36,7 @@
             </div>
             <hr class="footer-divider">
             <div class="footer-bottom">
-                <p class="footer-copyright">© 2025 Kanzey.co - Tous droits réservés</p>
+                <p class="footer-copyright">© 2026 Kanzey.co - Tous droits réservés</p>
                 <p class="footer-made">Made in Africa, pour l'Afrique</p>
             </div>
         </div>
@@ -49,4 +49,4 @@
     <script src="<?php echo BASE_URL; ?>assets/js/main.js"></script>
     </body>
 
-    </html>
+    </html>
