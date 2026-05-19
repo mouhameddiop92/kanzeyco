@@ -4,18 +4,18 @@
  */
 
 // Configuration de la base de données local
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'kanzeyco_db');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_CHARSET', 'utf8mb4');
-
-// Configuration de la base de données en production
 // define('DB_HOST', 'localhost');
 // define('DB_NAME', 'kanzeyco_db');
-// define('DB_USER', 'entreprise_user');
-// define('DB_PASS', 'motdepassefort');
+// define('DB_USER', 'root');
+// define('DB_PASS', '');
 // define('DB_CHARSET', 'utf8mb4');
+
+// Configuration de la base de données en production
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'kanzeyco_db');
+define('DB_USER', 'entreprise_user');
+define('DB_PASS', 'motdepassefort');
+define('DB_CHARSET', 'utf8mb4');
 
 /**
  * Connexion à la base de données
