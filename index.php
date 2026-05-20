@@ -788,7 +788,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
                 <p>Aujourd’hui, nous accompagnons des acteurs dans l’événementiel, l’immobilier, le commerce et l’éducation – avec un impact mesurable et durable.</p>
             </div>
             <div class="about-hero-image">
-                <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=960&q=80" alt="Équipe Kanzey en réunion">
+                <img src="<?php echo BASE_URL; ?>assets/images/propos.jpeg" alt="Équipe Kanzey en réunion">
             </div>
         </div>
     </div>
