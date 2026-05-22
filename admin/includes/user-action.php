@@ -9,9 +9,8 @@ require_once 'config.php';
 require_once 'user-handler.php';
 require_once '../../includes/database.php';
 
-// Vérifier que l'utilisateur est connecté
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    http_response_code(401);
+if (!isAdmin()) {
+    http_response_code(403);
     echo json_encode(['success' => false, 'message' => 'Non autorisé']);
     exit;
 }
@@ -36,7 +35,7 @@ try {
                     $response = ['success' => false, 'message' => 'Email invalide'];
                 } else if (strlen($password) < 6) {
                     $response = ['success' => false, 'message' => 'Le mot de passe doit faire au moins 6 caractères'];
-                } else if (!in_array($role, ['admin', 'editor', 'author'])) {
+                } else if (!in_array($role, ['admin', 'author'])) {
                     $response = ['success' => false, 'message' => 'Rôle invalide'];
                 } else {
                     $response = createUser($username, $email, $password, $role, $status);
@@ -57,7 +56,7 @@ try {
                     $response = ['success' => false, 'message' => 'Données invalides'];
                 } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $response = ['success' => false, 'message' => 'Email invalide'];
-                } else if (!in_array($role, ['admin', 'editor', 'author'])) {
+                } else if (!in_array($role, ['admin', 'author'])) {
                     $response = ['success' => false, 'message' => 'Rôle invalide'];
                 } else {
                     $response = updateUser($userId, $username, $email, $role, $status);

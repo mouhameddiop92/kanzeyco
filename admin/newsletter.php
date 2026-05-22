@@ -1,4 +1,7 @@
 <?php
+require_once 'includes/config.php';
+requireAdmin();
+
 $pageTitle = 'Newsletter';
 require_once 'includes/admin-header.php';
 require_once 'includes/newsletter-handler.php';

@@ -5,7 +5,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KANZEYCO - Transformons l'Afrique par le digital</title>
+    <?php
+    // Titre et description dynamiques pour SEO
+    $siteName = 'KANZEYCO';
+    $defaultTitle = "$siteName - Transformons l'Afrique par le digital";
+    $titleTag = isset($pageTitle) && $pageTitle ? ($pageTitle . ' - ' . $siteName) : $defaultTitle;
+    $metaDescription = $metaDescription ?? ($siteName . ' — Articles, solutions digitales et conseils pour entreprises en Afrique.');
+    $metaImage = $metaImage ?? (BASE_URL . 'assets/images/marqueting.avif');
+    $canonical = isset($canonical) ? $canonical : (isset($_SERVER['REQUEST_URI']) ? rtrim(BASE_URL, '/') . $_SERVER['REQUEST_URI'] : BASE_URL);
+    ?>
+    <title><?php echo htmlspecialchars($titleTag); ?></title>
+
+    <meta name="description" content="<?php echo htmlspecialchars($metaDescription); ?>">
+    <link rel="canonical" href="<?php echo htmlspecialchars($canonical); ?>">
+    <meta name="robots" content="index,follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:site_name" content="<?php echo htmlspecialchars($siteName); ?>">
+    <meta property="og:title" content="<?php echo htmlspecialchars($titleTag); ?>">
+    <meta property="og:description" content="<?php echo htmlspecialchars($metaDescription); ?>">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="<?php echo htmlspecialchars($canonical); ?>">
+    <meta property="og:image" content="<?php echo htmlspecialchars($metaImage); ?>">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?php echo htmlspecialchars($titleTag); ?>">
+    <meta name="twitter:description" content="<?php echo htmlspecialchars($metaDescription); ?>">
+    <meta name="twitter:image" content="<?php echo htmlspecialchars($metaImage); ?>">
+
+    <!-- JSON-LD Organization -->
+    <script type="application/ld+json">
+        <?php echo json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'Organization',
+            'name' => $siteName,
+            'url' => rtrim(BASE_URL, '/'),
+            'logo' => BASE_URL . 'assets/images/Logo%20Kanzey%20Co.png',
+            'sameAs' => []
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
+    </script>
+    <?php if (isset($articleJsonLd) && $articleJsonLd): ?>
+        <script type="application/ld+json">
+            <?php echo $articleJsonLd; ?>
+        </script>
+    <?php endif; ?>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -15,7 +60,6 @@
 
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css?v=1.1">
@@ -27,7 +71,7 @@
         <div class="container">
             <a class="navbar-brand" href="<?php echo BASE_URL; ?>" id="logoLink">
                 <div class="logo" id="siteLogo">
-                    <img src="<?php echo BASE_URL; ?>assets/images/Logo%20Kanzey%20Co.png" alt="logo" style="width: 100px; height: 100px; object-fit: contain;">
+                    <img src="<?php echo BASE_URL; ?>assets/images/Logo%20Kanzey%20Co.png" alt="KANZEYCO - Solutions digitales" width="100" height="100" loading="eager" decoding="async" style="width: 100px; height: 100px; object-fit: contain;">
                 </div>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">

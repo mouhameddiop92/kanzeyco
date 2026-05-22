@@ -1,8 +1,10 @@
 <?php
 require_once __DIR__ . '/config.php';
 requireLogin();
-
-// Calculer le nombre de notifications (messages non lus + commentaires en attente)
+$adminRole = getLoggedUserRole();
+$isAdminUser = isAdmin();
+$isAuthorUser = isAuthor();
+// Calculer le nombre de notifications selon le rôle
 $unreadContacts = 0;
 $pendingComments = 0;
 $notificationCount = 0;
@@ -10,15 +12,22 @@ $pdo = null;
 try {
     $pdo = getDBConnection();
     if ($pdo) {
-        // messages non lus (status = 'new')
-        $stmt = $pdo->query("SELECT COUNT(*) FROM contacts WHERE status = 'new'");
-        $unreadContacts = (int) $stmt->fetchColumn();
+        if ($isAdminUser) {
+            // messages non lus (status = 'new')
+            $stmt = $pdo->query("SELECT COUNT(*) FROM contacts WHERE status = 'new'");
+            $unreadContacts = (int) $stmt->fetchColumn();
 
-        // commentaires en attente (status = 'pending')
-        $stmt2 = $pdo->query("SELECT COUNT(*) FROM comments WHERE status = 'pending'");
-        $pendingComments = (int) $stmt2->fetchColumn();
+            // commentaires en attente (status = 'pending')
+            $stmt2 = $pdo->query("SELECT COUNT(*) FROM comments WHERE status = 'pending'");
+            $pendingComments = (int) $stmt2->fetchColumn();
 
-        $notificationCount = $unreadContacts + $pendingComments;
+            $notificationCount = $unreadContacts + $pendingComments;
+        } elseif ($isAuthorUser) {
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM comments c JOIN articles a ON c.article_id = a.article_id WHERE c.status = 'pending' AND a.author = ?");
+            $stmt->execute([$_SESSION['admin_username'] ?? '']);
+            $pendingComments = (int) $stmt->fetchColumn();
+            $notificationCount = $pendingComments;
+        }
     }
 } catch (Exception $e) {
     error_log('Erreur lecture notifications admin-header: ' . $e->getMessage());
@@ -71,30 +80,48 @@ try {
                         <span>Articles</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="realisations.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'realisations.php' ? 'active' : ''; ?>">
-                        <i class="fas fa-newspaper"></i>
-                        <span>Réalisations</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="statistics.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'statistics.php' ? 'active' : ''; ?>">
-                        <i class="fas fa-chart-bar"></i>
-                        <span>Statistiques</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="users.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'users.php' ? 'active' : ''; ?>">
-                        <i class="fas fa-users"></i>
-                        <span>Utilisateurs</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="settings.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'settings.php' ? 'active' : ''; ?>">
-                        <i class="fas fa-cog"></i>
-                        <span>Paramètres</span>
-                    </a>
-                </li>
+                <?php if ($isAdminUser || $isAuthorUser): ?>
+                    <li class="nav-item">
+                        <a href="realisations.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'realisations.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-briefcase"></i>
+                            <span>Réalisations</span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($isAdminUser): ?>
+                    <li class="nav-item">
+                        <a href="statistics.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'statistics.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Statistiques</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="users.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'users.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-users"></i>
+                            <span>Utilisateurs</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="contacts.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'contacts.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-envelope"></i>
+                            <span>Contacts</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="newsletter.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'newsletter.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-newspaper"></i>
+                            <span>Newsletter</span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($isAdminUser): ?>
+                    <li class="nav-item">
+                        <a href="settings.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'settings.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-cog"></i>
+                            <span>Paramètres</span>
+                        </a>
+                    </li>
+                <?php endif; ?>
                 <li class="nav-item">
                     <a href="<?php echo BASE_URL; ?>index.php" class="nav-link" target="_blank">
                         <i class="fas fa-external-link-alt"></i>
@@ -135,12 +162,18 @@ try {
                             <li>
                                 <h6 class="dropdown-header">Notifications</h6>
                             </li>
-                            <li><a class="dropdown-item" href="./contacts.php">Nouveau message<?php echo $unreadContacts ? ' (' . $unreadContacts . ')' : ''; ?></a></li>
-                            <hr class="dropdown-divider">
-                            <li><a class="dropdown-item" href="./comments.php">Nouveaux commentaires<?php echo $pendingComments ? ' (' . $pendingComments . ')' : ''; ?></a></li>
-                            <hr class="dropdown-divider">
-                            <li><a class="dropdown-item" href="./newsletter.php">Newsletter</li>
-                                
+                            <?php if ($isAdminUser): ?>
+                                <li><a class="dropdown-item" href="./contacts.php">Nouveau message<?php echo $unreadContacts ? ' (' . $unreadContacts . ')' : ''; ?></a></li>
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item" href="./comments.php">Nouveaux commentaires<?php echo $pendingComments ? ' (' . $pendingComments . ')' : ''; ?></a></li>
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item" href="./newsletter.php">Newsletter</a></li>
+                            <?php elseif ($isAuthorUser): ?>
+                                <li><a class="dropdown-item" href="./comments.php">Commentaires sur mes articles<?php echo $pendingComments ? ' (' . $pendingComments . ')' : ''; ?></a></li>
+                            <?php else: ?>
+                                <li><span class="dropdown-item text-muted">Aucune notification disponible</span></li>
+                            <?php endif; ?>
+
                         </ul>
                     </div>
 
@@ -150,10 +183,12 @@ try {
                             <span><?php echo htmlspecialchars($_SESSION['admin_username'] ?? 'Admin'); ?></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="settings.php"><i class="fas fa-cog me-2"></i>Paramètres</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                            <?php if ($isAdminUser): ?>
+                                <li><a class="dropdown-item" href="settings.php"><i class="fas fa-cog me-2"></i>Paramètres</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                            <?php endif; ?>
                             <li><a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i>Déconnexion</a></li>
                         </ul>
                     </div>

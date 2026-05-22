@@ -3,6 +3,10 @@ require_once 'includes/articles-db.php';
 $articles = getArticles();
 
 $featuredArticle = $articles[0] ?? null;
+
+// SEO
+$pageTitle = 'Blog - ' . 'KANZEYCO';
+$metaDescription = 'Articles, cas clients et conseils pour accompagner la transformation digitale en Afrique.';
 ?>
 <?php include 'includes/header.php'; ?>
 
@@ -51,7 +55,7 @@ $featuredArticle = $articles[0] ?? null;
             <?php foreach ($articles as $article): ?>
                 <article class="news-card">
                     <div class="news-card-image">
-                        <img src="<?php echo (strpos($article['image'], 'http') === 0) ? htmlspecialchars($article['image']) : BASE_URL . htmlspecialchars($article['image']); ?>" alt="<?php echo htmlspecialchars($article['title']); ?>">
+                        <img src="<?php echo (strpos($article['image'], 'http') === 0) ? htmlspecialchars($article['image']) : BASE_URL . htmlspecialchars($article['image']); ?>" alt="<?php echo htmlspecialchars($article['title']); ?>" loading="lazy" decoding="async">
                         <span class="news-tag"><?php echo htmlspecialchars($article['category']); ?></span>
                     </div>
                     <div class="news-card-body">

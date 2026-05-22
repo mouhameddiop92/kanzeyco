@@ -22,6 +22,22 @@ function isAdminLoggedIn()
     return isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
 }
 
+// Récupérer le rôle de l'utilisateur connecté
+function getLoggedUserRole()
+{
+    return $_SESSION['admin_role'] ?? null;
+}
+
+function isAdmin()
+{
+    return isAdminLoggedIn() && getLoggedUserRole() === 'admin';
+}
+
+function isAuthor()
+{
+    return isAdminLoggedIn() && getLoggedUserRole() === 'author';
+}
+
 // Rediriger vers la page de connexion si non connecté
 function requireLogin()
 {
@@ -29,6 +45,24 @@ function requireLogin()
         header('Location: login.php');
         exit();
     }
+}
+
+function requireRole(array $roles)
+{
+    if (!isAdminLoggedIn() || !in_array(getLoggedUserRole(), $roles, true)) {
+        header('Location: dashboard.php');
+        exit();
+    }
+}
+
+function requireAdmin()
+{
+    requireRole(['admin']);
+}
+
+function requireAdminOrAuthor()
+{
+    requireRole(['admin', 'author']);
 }
 
 // Fonction de connexion avec vérification dans la base de données
@@ -106,7 +140,7 @@ function adminLogout()
 }
 
 // Récupérer les statistiques du dashboard depuis la base de données
-function getDashboardStats()
+function getDashboardStats($authorUsername = null)
 {
     $pdo = getDBConnection();
 
@@ -115,51 +149,88 @@ function getDashboardStats()
         return [
             'total_articles' => 6,
             'total_views' => 12450,
-            'total_users' => 1,
+            'total_users' => $authorUsername ? 0 : 1,
             'new_comments' => 0,
-            'total_newsletter' => 0,
+            'total_newsletter' => $authorUsername ? 0 : 0,
             'recent_articles' => 3,
             'popular_articles' => 5
         ];
     }
 
     try {
+        $authorClause = '';
+        $params = [];
+        if ($authorUsername) {
+            $authorClause = ' AND author = :author';
+            $params[':author'] = $authorUsername;
+        }
+
         // Total d'articles publiés
-        $sql = "SELECT COUNT(*) as total FROM articles WHERE status = 'published'";
-        $stmt = $pdo->query($sql);
+        $sql = "SELECT COUNT(*) as total FROM articles WHERE status = 'published'" . $authorClause;
+        $stmt = $pdo->prepare($sql);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        $stmt->execute();
         $totalArticles = $stmt->fetch()['total'];
 
         // Total de vues : privilégier article_views si elle existe, sinon articles.views
         $totalViews = 0;
         $tableExists = (bool)$pdo->query("SHOW TABLES LIKE 'article_views'")->fetch();
         if ($tableExists) {
-            $sql = "SELECT COUNT(*) as total FROM article_views";
-            $stmt = $pdo->query($sql);
+            if ($authorUsername) {
+                $sql = "SELECT COUNT(*) as total FROM article_views av
+                        JOIN articles a ON a.article_id = av.article_id
+                        WHERE a.status = 'published' AND a.author = :author";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindValue(':author', $authorUsername);
+            } else {
+                $sql = "SELECT COUNT(*) as total FROM article_views";
+                $stmt = $pdo->query($sql);
+            }
             $totalViews = (int)($stmt->fetch()['total'] ?? 0);
         }
         // Si article_views n'existe pas ou est vide, utiliser SUM(views) de articles
         if ($totalViews === 0) {
-            $sql = "SELECT SUM(views) as total FROM articles";
-            $stmt = $pdo->query($sql);
+            $sql = "SELECT SUM(views) as total FROM articles WHERE 1=1" . $authorClause;
+            $stmt = $pdo->prepare($sql);
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value);
+            }
+            $stmt->execute();
             $totalViews = (int)($stmt->fetch()['total'] ?? 0);
         }
 
         // Total d'utilisateurs
-        $sql = "SELECT COUNT(*) as total FROM users WHERE status = 'active'";
-        $stmt = $pdo->query($sql);
-        $totalUsers = $stmt->fetch()['total'];
+        if ($authorUsername) {
+            $totalUsers = 0;
+        } else {
+            $sql = "SELECT COUNT(*) as total FROM users WHERE status = 'active'";
+            $stmt = $pdo->query($sql);
+            $totalUsers = (int)$stmt->fetch()['total'];
+        }
 
         // Nouveaux commentaires en attente
-        $sql = "SELECT COUNT(*) as total FROM comments WHERE status = 'pending'";
-        $stmt = $pdo->query($sql);
-        $newComments = $stmt->fetch()['total'];
+        if ($authorUsername) {
+            $sql = "SELECT COUNT(*) as total FROM comments c
+                    JOIN articles a ON c.article_id = a.article_id
+                    WHERE c.status = 'pending' AND a.author = :author";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':author', $authorUsername);
+            $stmt->execute();
+            $newComments = (int)$stmt->fetch()['total'];
+        } else {
+            $sql = "SELECT COUNT(*) as total FROM comments WHERE status = 'pending'";
+            $stmt = $pdo->query($sql);
+            $newComments = (int)$stmt->fetch()['total'];
+        }
 
         return [
             'total_articles' => (int)$totalArticles,
             'total_views' => (int)$totalViews,
             'total_users' => (int)$totalUsers,
             'new_comments' => (int)$newComments,
-            'total_newsletter' => (int)($pdo->query("SELECT COUNT(*) as total FROM newsletter WHERE status = 'active'")->fetch()['total'] ?? 0),
+            'total_newsletter' => $authorUsername ? 0 : (int)($pdo->query("SELECT COUNT(*) as total FROM newsletter WHERE status = 'active'")->fetch()['total'] ?? 0),
             'recent_articles' => (int)$totalArticles > 3 ? 3 : (int)$totalArticles,
             'popular_articles' => 5
         ];

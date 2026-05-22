@@ -8,6 +8,11 @@ require_once __DIR__ . '/realisations-handler.php';
 
 header('Content-Type: application/json');
 requireLogin();
+if (!isAdmin()) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'Non autorisé']);
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);

@@ -258,7 +258,7 @@ $otherArticles = array_slice($recentArticles, 1, 3);
             </div>
             <div class="col-lg-6 col-md-12">
                 <div class="transversal-feature-card transversal-card-analytics">
-                    <img src="<?php echo BASE_URL; ?>assets/images/marqueting.avif" alt="Data Analytics" class="transversal-card-image">
+                    <img src="<?php echo BASE_URL; ?>assets/images/marqueting.avif" alt="Data Analytics" class="transversal-card-image" loading="lazy" decoding="async">
                     <div class="transversal-card-overlay">
                         <h3 class="transversal-card-title">Marketing Digital 360°</h3>
                         <p class="transversal-card-subtitle">Maximisez votre présence en ligne.</p>
@@ -694,15 +694,15 @@ $otherArticles = array_slice($recentArticles, 1, 3);
     <div class="container">
         <div class="news-header text-center mb-5">
             <span class="transversal-tag">Blog & Actualités</span>
-            <h1 class="news-title">Nos insights pour accélérer votre transformation</h1>
+            <h2 class="news-title">Nos insights pour accélérer votre transformation</h2>
             <p class="news-subtitle">Cas clients, tendances sectorielles, retours d'expérience et conseils actionnables.</p>
         </div>
         <?php if ($featuredArticle): ?>
-            <?php 
-                $featuredImg = $featuredArticle['image'];
-                if (!preg_match('/^https?:\/\//', $featuredImg)) {
-                    $featuredImg = BASE_URL . $featuredImg;
-                }
+            <?php
+            $featuredImg = $featuredArticle['image'];
+            if (!preg_match('/^https?:\/\//', $featuredImg)) {
+                $featuredImg = BASE_URL . $featuredImg;
+            }
             ?>
             <div class="news-feature mb-5">
                 <div class="news-feature-image">
@@ -727,11 +727,11 @@ $otherArticles = array_slice($recentArticles, 1, 3);
         <?php endif; ?>
         <div class="news-grid">
             <?php foreach ($otherArticles as $article): ?>
-                <?php 
-                    $articleImg = $article['image'];
-                    if (!preg_match('/^https?:\/\//', $articleImg)) {
-                        $articleImg = BASE_URL . $articleImg;
-                    }
+                <?php
+                $articleImg = $article['image'];
+                if (!preg_match('/^https?:\/\//', $articleImg)) {
+                    $articleImg = BASE_URL . $articleImg;
+                }
                 ?>
                 <article class="news-card">
                     <div class="news-card-image">

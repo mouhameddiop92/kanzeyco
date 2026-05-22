@@ -8,6 +8,11 @@ require_once __DIR__ . '/comments-handler.php';
 
 header('Content-Type: application/json');
 requireLogin();
+if (!isAdmin() && !isAuthor()) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'Non autorisé']);
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -32,6 +37,13 @@ try {
         case 'delete':
             $id = intval($_POST['id'] ?? 0);
             if ($id <= 0) throw new Exception('Identifiant invalide');
+            if (isAuthor()) {
+                require_once __DIR__ . '/comments-handler.php';
+                $comment = getCommentById($id);
+                if (!$comment || ($comment['article_author'] ?? '') !== ($_SESSION['admin_username'] ?? '')) {
+                    throw new Exception('Non autorisé');
+                }
+            }
             $ok = deleteComment($id);
             echo json_encode(['success' => $ok]);
             break;
@@ -39,6 +51,13 @@ try {
         case 'approve':
             $id = intval($_POST['id'] ?? 0);
             if ($id <= 0) throw new Exception('Identifiant invalide');
+            if (isAuthor()) {
+                require_once __DIR__ . '/comments-handler.php';
+                $comment = getCommentById($id);
+                if (!$comment || ($comment['article_author'] ?? '') !== ($_SESSION['admin_username'] ?? '')) {
+                    throw new Exception('Non autorisé');
+                }
+            }
             $ok = approveComment($id);
             echo json_encode(['success' => $ok]);
             break;
@@ -46,6 +65,13 @@ try {
         case 'unapprove':
             $id = intval($_POST['id'] ?? 0);
             if ($id <= 0) throw new Exception('Identifiant invalide');
+            if (isAuthor()) {
+                require_once __DIR__ . '/comments-handler.php';
+                $comment = getCommentById($id);
+                if (!$comment || ($comment['article_author'] ?? '') !== ($_SESSION['admin_username'] ?? '')) {
+                    throw new Exception('Non autorisé');
+                }
+            }
             $ok = unapproveComment($id);
             echo json_encode(['success' => $ok]);
             break;

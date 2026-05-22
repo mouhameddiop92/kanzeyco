@@ -1,4 +1,7 @@
 <?php
+require_once 'includes/config.php';
+requireAdmin();
+
 $pageTitle = "Statistiques";
 require_once 'includes/admin-header.php';
 

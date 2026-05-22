@@ -1,4 +1,7 @@
 <?php
+require_once 'includes/config.php';
+requireAdmin();
+
 $pageTitle = "Gestion des utilisateurs";
 require_once 'includes/admin-header.php';
 require_once '../includes/database.php';
@@ -167,7 +170,6 @@ if ($pdo) {
                         <select class="form-select" id="userRole" name="role" required>
                             <option value="">Sélectionner...</option>
                             <option value="admin">Administrateur</option>
-                            <option value="editor">Éditeur</option>
                             <option value="author">Auteur</option>
                         </select>
                     </div>
@@ -216,7 +218,6 @@ if ($pdo) {
                         <select class="form-select" id="editUserRole" name="role" required>
                             <option value="">Sélectionner...</option>
                             <option value="admin">Administrateur</option>
-                            <option value="editor">Éditeur</option>
                             <option value="author">Auteur</option>
                         </select>
                     </div>

@@ -1,4 +1,7 @@
 <?php
+require_once 'includes/config.php';
+requireAdmin();
+
 $pageTitle = 'Commentaires';
 require_once 'includes/admin-header.php';
 require_once 'includes/comments-handler.php';
@@ -19,7 +22,12 @@ $pdo = getDBConnection();
 $articlesForFilter = [];
 if ($pdo) {
     try {
-        $stmt = $pdo->query("SELECT DISTINCT a.article_id, a.title FROM articles a JOIN comments c ON a.article_id = c.article_id ORDER BY a.title ASC");
+        if ($isAuthorUser) {
+            $stmt = $pdo->prepare("SELECT DISTINCT a.article_id, a.title FROM articles a JOIN comments c ON a.article_id = c.article_id WHERE a.author = ? ORDER BY a.title ASC");
+            $stmt->execute([$articleAuthor]);
+        } else {
+            $stmt = $pdo->query("SELECT DISTINCT a.article_id, a.title FROM articles a JOIN comments c ON a.article_id = c.article_id ORDER BY a.title ASC");
+        }
         $articlesForFilter = $stmt->fetchAll();
     } catch (Exception $e) {
         // ignore

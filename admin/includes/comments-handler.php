@@ -5,7 +5,7 @@
  */
 require_once __DIR__ . '/../../includes/database.php';
 
-function getComments($search = '', $articleId = '', $status = '', $page = 1, $perPage = 20)
+function getComments($search = '', $articleId = '', $status = '', $page = 1, $perPage = 20, $author = null)
 {
     $pdo = getDBConnection();
     if (!$pdo) return ['data' => [], 'total' => 0];
@@ -32,13 +32,18 @@ function getComments($search = '', $articleId = '', $status = '', $page = 1, $pe
         $params[] = $status;
     }
 
+    if (!empty($author)) {
+        $conditions[] = "a.author = ?";
+        $params[] = $author;
+    }
+
     $where = '';
     if (count($conditions) > 0) {
         $where = ' WHERE ' . implode(' AND ', $conditions);
     }
 
     try {
-        $countSql = "SELECT COUNT(*) FROM comments c" . $where;
+        $countSql = "SELECT COUNT(*) FROM comments c LEFT JOIN articles a ON c.article_id = a.article_id" . $where;
         $countStmt = $pdo->prepare($countSql);
         $countStmt->execute($params);
         $total = (int)$countStmt->fetchColumn();
@@ -63,7 +68,7 @@ function getCommentById($id)
     $pdo = getDBConnection();
     if (!$pdo) return null;
     try {
-        $sql = "SELECT c.*, a.title as article_title FROM comments c LEFT JOIN articles a ON c.article_id = a.article_id WHERE c.comment_id = ? LIMIT 1";
+        $sql = "SELECT c.*, a.title as article_title, a.author as article_author FROM comments c LEFT JOIN articles a ON c.article_id = a.article_id WHERE c.comment_id = ? LIMIT 1";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
         $result = $stmt->fetch();

@@ -28,6 +28,63 @@ $relatedArticles = array_filter(getArticles(), function ($item) use ($article) {
     return $item['slug'] !== $article['slug'];
 });
 $relatedArticles = array_slice(array_values($relatedArticles), 0, 3);
+// SEO variables pour header
+$pageTitle = isset($article['title']) ? $article['title'] : 'Article';
+$metaDescription = isset($article['excerpt']) ? $article['excerpt'] : substr(strip_tags(implode(' ', array_column($article['content'], 'text'))), 0, 150);
+$metaImage = isset($article['image']) ? ((strpos($article['image'], 'http') === 0) ? $article['image'] : BASE_URL . $article['image']) : null;
+$canonical = rtrim(BASE_URL, '/') . '/article-detail.php?slug=' . urlencode($article['slug'] ?? '');
+
+// JSON-LD Article schema
+$articleUrl = $canonical;
+$datePublishedIso = null;
+try {
+    if (!empty($article['date'])) {
+        $dt = new DateTime($article['date']);
+        $datePublishedIso = $dt->format(DateTime::ATOM);
+    }
+} catch (Exception $e) {
+    $datePublishedIso = null;
+}
+$dateModifiedIso = null;
+if (!empty($article['updated_at'])) {
+    try {
+        $dt2 = new DateTime($article['updated_at']);
+        $dateModifiedIso = $dt2->format(DateTime::ATOM);
+    } catch (Exception $e) {
+        $dateModifiedIso = null;
+    }
+}
+$authorName = !empty($article['author']) ? $article['author'] : 'KANZEYCO';
+$images = [];
+if (!empty($metaImage)) {
+    $images[] = $metaImage;
+}
+$articleSchema = [
+    '@context' => 'https://schema.org',
+    '@type' => 'Article',
+    'mainEntityOfPage' => [
+        '@type' => 'WebPage',
+        '@id' => $articleUrl
+    ],
+    'headline' => $pageTitle,
+    'description' => $metaDescription,
+    'image' => $images,
+    'author' => [
+        '@type' => 'Person',
+        'name' => $authorName
+    ],
+    'publisher' => [
+        '@type' => 'Organization',
+        'name' => 'KANZEYCO',
+        'logo' => [
+            '@type' => 'ImageObject',
+            'url' => BASE_URL . 'assets/images/Logo%20Kanzey%20Co.png'
+        ]
+    ],
+    'datePublished' => $datePublishedIso,
+    'dateModified' => $dateModifiedIso
+];
+$articleJsonLd = json_encode($articleSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 ?>
 <?php include 'includes/header.php'; ?>
 
@@ -53,7 +110,7 @@ $relatedArticles = array_slice(array_values($relatedArticles), 0, 3);
             </div>
             <div class="col-lg-5">
                 <div class="ratio ratio-4x3 rounded-4 overflow-hidden shadow">
-                    <img src="<?php echo (strpos($article['image'], 'http') === 0) ? htmlspecialchars($article['image']) : BASE_URL . htmlspecialchars($article['image']); ?>" alt="<?php echo htmlspecialchars($article['title']); ?>" class="w-100 h-100" style="object-fit: cover;">
+                    <img src="<?php echo (strpos($article['image'], 'http') === 0) ? htmlspecialchars($article['image']) : BASE_URL . htmlspecialchars($article['image']); ?>" alt="<?php echo htmlspecialchars($article['title']); ?>" class="w-100 h-100" width="1200" height="900" loading="lazy" decoding="async" style="object-fit: cover;">
                 </div>
             </div>
         </div>

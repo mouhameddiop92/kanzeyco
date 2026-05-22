@@ -1,4 +1,7 @@
 <?php
+require_once 'includes/config.php';
+requireAdminOrAuthor();
+
 $pageTitle = "Gestion des articles";
 require_once 'includes/admin-header.php';
 require_once '../includes/articles-db.php';
@@ -6,9 +9,21 @@ require_once '../includes/articles-db.php';
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 $slug = isset($_GET['slug']) ? $_GET['slug'] : '';
 $articles = getArticles(null, null);
+$isAuthorUser = isAuthor();
+
+if ($isAuthorUser && !empty($articles)) {
+    $articles = array_filter($articles, function ($article) {
+        return isset($article['author']) && $article['author'] === ($_SESSION['admin_username'] ?? '');
+    });
+}
+
 $currentArticle = null;
 if ($action === 'edit' && $slug) {
     $currentArticle = getArticleBySlug($slug);
+    if ($isAuthorUser && $currentArticle && ($currentArticle['author'] ?? '') !== ($_SESSION['admin_username'] ?? '')) {
+        header('Location: articles.php');
+        exit();
+    }
 }
 
 $imageError = '';
@@ -25,17 +40,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $author = $_POST['author'] ?? '';
     $status = $_POST['status'] ?? 'published';
 
+    if ($isAuthorUser) {
+        $author = $_SESSION['admin_username'] ?? $author;
+    }
+
     // Gestion image uploadée
     $imagePath = '';
     if ($action === 'edit' && $currentArticle) {
         $imagePath = $currentArticle['image']; // garder l'ancienne si pas de nouvel upload
     }
     if (!empty($_FILES['image']['tmp_name'])) {
-        $allowed = ['jpg','jpeg','png','gif','webp'];
+        $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
         $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
         if (!in_array($ext, $allowed)) {
             $imageError = 'Format d\'image non autorisé (' . htmlspecialchars($ext) . ')';
-        } elseif ($_FILES['image']['size'] > 3*1024*1024) { // 3Mo
+        } elseif ($_FILES['image']['size'] > 3 * 1024 * 1024) { // 3Mo
             $imageError = 'Image trop volumineuse (max 3Mo)';
         } else {
             $uploadsDir = realpath(__DIR__ . '/../uploads') ?: __DIR__ . '/../uploads';
@@ -52,9 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $content = [];
     foreach (explode("\n\n", $contentText) as $block) {
         $block = trim($block);
-        if ($block) { $content[] = [ 'type'=>'paragraph', 'text'=>$block ]; }
+        if ($block) {
+            $content[] = ['type' => 'paragraph', 'text' => $block];
+        }
     }
-    $slugNew = strtolower(trim(preg_replace('/[^a-z0-9]+/i','-', $title), '-'));
+    $slugNew = strtolower(trim(preg_replace('/[^a-z0-9]+/i', '-', $title), '-'));
 
     // Insertion/Update (simulation d'abord, puis vrai code plus bas)
     if (!$imageError) {
@@ -131,35 +152,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </thead>
                     <tbody>
                         <?php foreach ($articles as $article): ?>
-                        <tr>
-                            <td>
-                                <div class="article-title-cell">
-                                    <strong><?php echo htmlspecialchars($article['title']); ?></strong>
-                                    <small class="text-muted d-block"><?php echo htmlspecialchars($article['excerpt']); ?></small>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="badge bg-secondary"><?php echo htmlspecialchars($article['category']); ?></span>
-                            </td>
-                            <td><?php echo htmlspecialchars($article['author']); ?></td>
-                            <td><?php echo htmlspecialchars($article['date']); ?></td>
-                            <td>
-                                <span class="badge bg-success">Publié</span>
-                            </td>
-                            <td>
-                                <div class="action-buttons">
-                                    <a href="<?php echo BASE_URL; ?>article-detail.php?slug=<?php echo $article['slug']; ?>" target="_blank" class="btn-icon" title="Voir">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="?action=edit&slug=<?php echo $article['slug']; ?>" class="btn-icon" title="Modifier">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button class="btn-icon btn-icon-danger" title="Supprimer" onclick="deleteArticle('<?php echo $article['slug']; ?>')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    <div class="article-title-cell">
+                                        <strong><?php echo htmlspecialchars($article['title']); ?></strong>
+                                        <small class="text-muted d-block"><?php echo htmlspecialchars($article['excerpt']); ?></small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary"><?php echo htmlspecialchars($article['category']); ?></span>
+                                </td>
+                                <td><?php echo htmlspecialchars($article['author']); ?></td>
+                                <td><?php echo htmlspecialchars($article['date']); ?></td>
+                                <td>
+                                    <span class="badge bg-success">Publié</span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a href="<?php echo BASE_URL; ?>article-detail.php?slug=<?php echo $article['slug']; ?>" target="_blank" class="btn-icon" title="Voir">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="?action=edit&slug=<?php echo $article['slug']; ?>" class="btn-icon" title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button class="btn-icon btn-icon-danger" title="Supprimer" onclick="deleteArticle('<?php echo $article['slug']; ?>')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -180,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //     }
     // }
     ?>
-    
+
     <div class="card">
         <div class="card-header">
             <h5 class="card-title">
@@ -196,31 +217,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="col-md-8">
                         <div class="form-group mb-3">
                             <label for="title" class="form-label">Titre *</label>
-                            <input type="text" class="form-control" id="title" name="title" 
-                                   value="<?php echo $currentArticle ? htmlspecialchars($currentArticle['title']) : ''; ?>" required>
+                            <input type="text" class="form-control" id="title" name="title"
+                                value="<?php echo $currentArticle ? htmlspecialchars($currentArticle['title']) : ''; ?>" required>
                         </div>
-                        
+
                         <div class="form-group mb-3">
                             <label for="excerpt" class="form-label">Extrait *</label>
                             <textarea class="form-control" id="excerpt" name="excerpt" rows="3" required><?php echo $currentArticle ? htmlspecialchars($currentArticle['excerpt']) : ''; ?></textarea>
                         </div>
-                        
+
                         <div class="form-group mb-3">
                             <label for="content" class="form-label">Contenu *</label>
-                            <textarea class="form-control" id="content" name="content" rows="10" required><?php 
-                                if ($currentArticle && isset($currentArticle['content'])) {
-                                    $contentText = '';
-                                    foreach ($currentArticle['content'] as $block) {
-                                        if ($block['type'] === 'paragraph') {
-                                            $contentText .= $block['text'] . "\n\n";
-                                        }
-                                    }
-                                    echo htmlspecialchars($contentText);
-                                }
-                            ?></textarea>
+                            <textarea class="form-control" id="content" name="content" rows="10" required><?php
+                                                                                                            if ($currentArticle && isset($currentArticle['content'])) {
+                                                                                                                $contentText = '';
+                                                                                                                foreach ($currentArticle['content'] as $block) {
+                                                                                                                    if ($block['type'] === 'paragraph') {
+                                                                                                                        $contentText .= $block['text'] . "\n\n";
+                                                                                                                    }
+                                                                                                                }
+                                                                                                                echo htmlspecialchars($contentText);
+                                                                                                            }
+                                                                                                            ?></textarea>
                         </div>
                     </div>
-                    
+
                     <div class="col-md-4">
                         <div class="form-group mb-3">
                             <label for="category" class="form-label">Catégorie *</label>
@@ -234,19 +255,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <option value="Success Story" <?php echo ($currentArticle && $currentArticle['category'] === 'Success Story') ? 'selected' : ''; ?>>Success Story</option>
                             </select>
                         </div>
-                        
+
                         <div class="form-group mb-3">
                             <label for="date" class="form-label">Date de publication *</label>
-                            <input type="date" class="form-control" id="date" name="date" 
-                                   value="<?php echo $currentArticle ? date('Y-m-d', strtotime($currentArticle['date'])) : date('Y-m-d'); ?>" required>
+                            <input type="date" class="form-control" id="date" name="date"
+                                value="<?php echo $currentArticle ? date('Y-m-d', strtotime($currentArticle['date'])) : date('Y-m-d'); ?>" required>
                         </div>
-                        
+
                         <div class="form-group mb-3">
                             <label for="author" class="form-label">Auteur *</label>
-                            <input type="text" class="form-control" id="author" name="author" 
-                                   value="<?php echo $currentArticle ? htmlspecialchars($currentArticle['author']) : 'Equipe Kanzey.co'; ?>" required>
+                            <input type="text" class="form-control" id="author" name="author"
+                                value="<?php echo $currentArticle ? htmlspecialchars($currentArticle['author']) : htmlspecialchars($_SESSION['admin_username'] ?? 'Equipe Kanzey.co'); ?>" <?php echo $isAuthorUser ? 'readonly' : ''; ?> required>
                         </div>
-                        
+
                         <div class="form-group mb-3">
                             <label for="image" class="form-label">URL de l'image</label>
                             <input type="file" class="form-control" id="image" name="image">
@@ -257,7 +278,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="text-success mt-2"><?php echo $successMsg; ?></div>
                             <?php endif; ?>
                         </div>
-                        
+
                         <div class="form-group mb-3">
                             <label for="status" class="form-label">Statut</label>
                             <select class="form-select" id="status" name="status">
@@ -267,7 +288,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save me-2"></i>Enregistrer
@@ -280,26 +301,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php endif; ?>
 
 <script>
-// Recherche dans le tableau
-document.getElementById('searchArticles')?.addEventListener('input', function(e) {
-    const searchTerm = e.target.value.toLowerCase();
-    const rows = document.querySelectorAll('#articlesTable tbody tr');
-    
-    rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(searchTerm) ? '' : 'none';
-    });
-});
+    // Recherche dans le tableau
+    document.getElementById('searchArticles')?.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('#articlesTable tbody tr');
 
-// Fonction de suppression
-function deleteArticle(slug) {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) {
-        // Ici, ajouter la logique de suppression
-        alert('Article supprimé (simulation)');
-        // window.location.href = 'articles.php?action=delete&slug=' + slug;
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    });
+
+    // Fonction de suppression
+    function deleteArticle(slug) {
+        if (confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) {
+            // Ici, ajouter la logique de suppression
+            alert('Article supprimé (simulation)');
+            // window.location.href = 'articles.php?action=delete&slug=' + slug;
+        }
     }
-}
 </script>
 
 <?php require_once 'includes/admin-footer.php'; ?>
-

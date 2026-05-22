@@ -1,4 +1,7 @@
 <?php
+require_once 'includes/config.php';
+requireAdmin();
+
 $pageTitle = 'Contacts';
 require_once 'includes/admin-header.php';
 require_once 'includes/contacts-handler.php';

@@ -1,13 +1,26 @@
 <?php
 $pageTitle = "Tableau de bord";
 require_once 'includes/admin-header.php';
-require_once '../includes/articles-data.php';
+require_once '../includes/articles-db.php';
 
-$stats = getDashboardStats();
+$adminRole = $_SESSION['admin_role'] ?? 'admin';
+$isAdminUser = $adminRole === 'admin';
+$isAuthorUser = $adminRole === 'author';
+$authorUsername = $_SESSION['admin_username'] ?? null;
+$stats = getDashboardStats($isAuthorUser ? $authorUsername : null);
 error_log("Dashboard stats: " . json_encode($stats));
 
-$articles = require '../includes/articles-data.php';
-$recentArticles = array_slice($articles, 0, 5);
+$recentArticles = getArticles(null, 5);
+if ($isAuthorUser) {
+    $recentArticles = array_values(array_filter($recentArticles, function ($article) use ($authorUsername) {
+        return isset($article['author']) && $article['author'] === $authorUsername;
+    }));
+}
+
+$viewsChartLabels = [];
+$viewsChartData = [];
+$viewsChartSource = null;
+$viewsChartNote = null;
 
 // Récupérer le nombre de contacts non lus
 $unreadContacts = 0;
@@ -21,8 +34,103 @@ if ($pdo) {
         error_log("Erreur lors de la récupération des contacts: " . $e->getMessage());
     }
 }
-?>
 
+// Construire les données du graphique des 7 derniers jours
+try {
+    $days = 7;
+    $tableExists = (bool)$pdo->query("SHOW TABLES LIKE 'article_views'")->fetch();
+    $dateCol = null;
+
+    if ($tableExists) {
+        $cols = $pdo->query("SHOW COLUMNS FROM article_views")->fetchAll(PDO::FETCH_ASSOC);
+        $fields = array_map(function ($c) {
+            return $c['Field'];
+        }, $cols);
+        foreach (["created_at", "date_created", "created", "timestamp", "date"] as $c) {
+            if (in_array($c, $fields)) {
+                $dateCol = $c;
+                break;
+            }
+        }
+        $dateCol = $dateCol ?: ($fields[0] ?? 'created_at');
+
+        if ($isAuthorUser) {
+            $sql = "SELECT DATE(av.$dateCol) AS day, COUNT(*) AS views
+                        FROM article_views av
+                        JOIN articles a ON a.article_id = av.article_id
+                        WHERE a.author = :author
+                          AND a.status = 'published'
+                          AND av.$dateCol >= DATE_SUB(CURDATE(), INTERVAL :days DAY)
+                        GROUP BY day
+                        ORDER BY day ASC";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':author', $authorUsername);
+        } else {
+            $sql = "SELECT DATE($dateCol) AS day, COUNT(*) AS views
+                        FROM article_views
+                        WHERE $dateCol >= DATE_SUB(CURDATE(), INTERVAL :days DAY)
+                        GROUP BY day
+                        ORDER BY day ASC";
+            $stmt = $pdo->prepare($sql);
+        }
+
+        $stmt->bindValue(':days', $days, PDO::PARAM_INT);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $map = [];
+        foreach ($rows as $r) {
+            $map[$r['day']] = (int)$r['views'];
+        }
+
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $d = (new DateTime())->modify("-{$i} days")->format('Y-m-d');
+            $viewsChartLabels[] = $d;
+            $viewsChartData[] = $map[$d] ?? 0;
+        }
+
+        $viewsChartSource = 'article_views';
+    } else {
+        // Si pas de table article_views, repli sur la colonne views dans articles (pas d'historique)
+        $colsA = $pdo->query("SHOW COLUMNS FROM articles")->fetchAll(PDO::FETCH_ASSOC);
+        $fieldsA = array_map(function ($c) {
+            return $c['Field'];
+        }, $colsA);
+        if (in_array('views', $fieldsA)) {
+            if ($isAuthorUser) {
+                $sql = "SELECT SUM(views) as total FROM articles WHERE author = :author AND status = 'published'";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindValue(':author', $authorUsername);
+                $stmt->execute();
+                $total = (int)($stmt->fetch()['total'] ?? 0);
+            } else {
+                $sql = "SELECT SUM(views) as total FROM articles";
+                $stmt = $pdo->query($sql);
+                $total = (int)($stmt->fetch()['total'] ?? 0);
+            }
+            // remplir par zéros (historique non disponible) et garder total dans les cards
+            for ($i = 0; $i < $days; $i++) {
+                $viewsChartLabels[] = (new DateTime())->modify("-{$i} days")->format('Y-m-d');
+                $viewsChartData[] = 0;
+            }
+            $viewsChartNote = 'Historique des vues non disponible (utilisation de articles.views).';
+        }
+    }
+} catch (PDOException $e) {
+    error_log('Erreur lecture vues dashboard: ' . $e->getMessage());
+}
+
+// Si aucune donnée, remplir par des zéros pour éviter erreur JS
+if (empty($viewsChartLabels)) {
+    $days = $days ?? 7;
+    for ($i = $days - 1; $i >= 0; $i--) {
+        $d = (new DateTime())->modify("-{$i} days")->format('Y-m-d');
+        $viewsChartLabels[] = $d;
+        $viewsChartData[] = 0;
+    }
+}
+
+?>
 <div class="page-header">
     <h1 class="page-title">Tableau de bord</h1>
     <p class="page-subtitle">Vue d'ensemble de votre site</p>
@@ -54,29 +162,33 @@ if ($pdo) {
         </div>
     </div>
 
-    <div class="col-6 col-md-3 mb-3">
-        <div class="stat-card">
-            <div class="stat-icon stat-icon-info">
-                <i class="fas fa-users"></i>
-            </div>
-            <div class="stat-content">
-                <h3 class="stat-value"><?php echo number_format($stats['total_users'], 0, ',', ' '); ?></h3>
-                <p class="stat-label">Utilisateurs</p>
+    <?php if ($isAdminUser): ?>
+        <div class="col-6 col-md-3 mb-3">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-info">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-value"><?php echo number_format($stats['total_users'], 0, ',', ' '); ?></h3>
+                    <p class="stat-label">Utilisateurs</p>
+                </div>
             </div>
         </div>
-    </div>
+    <?php endif; ?>
 
-    <div class="col-6 col-md-3 mb-3">
-        <div class="stat-card">
-            <div class="stat-icon stat-icon-warning">
-                <i class="fas fa-comments"></i>
-            </div>
-            <div class="stat-content">
-                <h3 class="stat-value"><?php echo $unreadContacts; ?></h3>
-                <p class="stat-label">Nouveaux messages</p>
+    <?php if ($isAdminUser): ?>
+        <div class="col-6 col-md-3 mb-3">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-warning">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-value"><?php echo $unreadContacts; ?></h3>
+                    <p class="stat-label">Nouveaux messages</p>
+                </div>
             </div>
         </div>
-    </div>
+    <?php endif; ?>
 </div>
 
 <!-- Contenu principal -->
@@ -155,14 +267,16 @@ if ($pdo) {
                         <i class="fas fa-plus-circle"></i>
                         <span>Nouvel article</span>
                     </a>
-                    <a href="statistics.php" class="quick-action-btn">
-                        <i class="fas fa-chart-bar"></i>
-                        <span>Voir statistiques</span>
-                    </a>
-                    <a href="settings.php" class="quick-action-btn">
-                        <i class="fas fa-cog"></i>
-                        <span>Paramètres</span>
-                    </a>
+                    <?php if ($isAdminUser): ?>
+                        <a href="statistics.php" class="quick-action-btn">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Voir statistiques</span>
+                        </a>
+                        <a href="settings.php" class="quick-action-btn">
+                            <i class="fas fa-cog"></i>
+                            <span>Paramètres</span>
+                        </a>
+                    <?php endif; ?>
                     <a href="<?php echo BASE_URL; ?>index.php" target="_blank" class="quick-action-btn">
                         <i class="fas fa-external-link-alt"></i>
                         <span>Voir le site</span>
@@ -174,18 +288,22 @@ if ($pdo) {
 </div>
 
 <script>
+    // Données JS pour le graphique (générées par PHP)
+    const viewsLabels = <?php echo json_encode($viewsChartLabels); ?>;
+    const viewsData = <?php echo json_encode($viewsChartData); ?>;
+
     // Graphique de vues
     const ctx = document.getElementById('viewsChart').getContext('2d');
     const viewsChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+            labels: viewsLabels,
             datasets: [{
                 label: 'Vues',
-                data: [450, 520, 480, 610, 580, 730, 680],
+                data: viewsData,
                 borderColor: '#1e2a5e',
-                backgroundColor: 'rgba(30, 42, 94, 0.1)',
-                tension: 0.4,
+                backgroundColor: 'rgba(30, 42, 94, 0.08)',
+                tension: 0.3,
                 fill: true
             }]
         },

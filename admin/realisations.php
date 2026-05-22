@@ -1,4 +1,7 @@
 <?php
+require_once 'includes/config.php';
+requireAdminOrAuthor();
+
 $pageTitle = 'Réalisations';
 require_once 'includes/admin-header.php';
 require_once 'includes/realisations-handler.php';
